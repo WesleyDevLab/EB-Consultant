@@ -1,0 +1,17 @@
+{
+  "name": "EB-Consultant",
+  "version": "0.1.0",
+  "homepage": "https://github.com/uicestone/EB-Consultant",
+  "authors": [
+    "Uice Lu <uicestone@gmail.com>"
+  ],
+  "main": "public/index.php",
+  "license": "MIT",
+  "dependencies": {
+    "jquery": "*",
+    "fontawesome": "*",
+    "bootstrap": "3.*",
+	"chartjs":"*",
+	"highstock-release":"*"
+  }
+}
