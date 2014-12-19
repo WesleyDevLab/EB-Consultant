@@ -6,14 +6,24 @@ class ConsultantController extends BaseController {
 			
 	public function serveWeixin()
 	{
-		
+		$wx = new Weixin();
 	}
 	
 	public function signup()
 	{
+		$weixin_qy = new WeixinQY();
+		if(!Session::get('weixin.user_id')){
+			$weixin_user_info = $weixin_qy->oauth_get_user_info();
+			Session::set('weixin.user_id', $weixin_user_info->UserId);
+		}
+
 		if(Input::method() === 'POST')
 		{
-			$this->consultant = Consultant::create(Input::all());
+			$this->consultant = new Consultant();
+			$this->consultant->fill(Input::all());
+			$this->consultant->open_id = Session::get('weixin.user_id');
+			$this->consultant->save();
+			
 			Session::set('user.id', $this->consultant->id);
 			Session::set('user.type', 'consultant');
 			
@@ -42,8 +52,12 @@ class ConsultantController extends BaseController {
 			
 			$client = new Client();
 			$client->name = Input::get('name');
+			$client->open_id = md5(rand(0, 1E6));
 			$client->save();
 			$client->products()->save($product);
+			
+			$weixin = new Weixin();
+			
 			
 			$client->consultants()->save($this->consultant);
 			
@@ -54,8 +68,8 @@ class ConsultantController extends BaseController {
 	
 	public function makeReport(Product $product = null)
 	{
-		Session::set('user.id', 1);
-		Session::set('user.type', 'consultant');
+//		Session::set('user.id', 1);
+//		Session::set('user.type', 'consultant');
 		
 		if(Session::get('user.id') && Session::get('user.type') === 'consultant'){
 			$this->consultant = Consultant::find(Session::get('user.id'));

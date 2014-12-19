@@ -1,5 +1,5 @@
 <?php echo View::make('header'); ?>
-<h1>私募投顾注册</h1>
+<h1 class="text-center">私募投顾注册</h1>
 <form class="form-horizontal" role="form" method="post">
 	<div class="form-group">
 		<label class="control-label col-sm-2">名称</label>
@@ -13,6 +13,6 @@
 			<textarea name="description" class="form-control"></textarea>
 		</div>
 	</div>
-	<button type="submit" class="btn btn-primary">注册</button>
+	<button type="submit" class="btn btn-primary btn-block btn-lg">注册</button>
 </form>
 <?php echo View::make('footer'); ?>

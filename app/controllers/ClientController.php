@@ -11,10 +11,10 @@ class ClientController extends BaseController {
 	
 	public function viewReport(Client $client = null)
 	{
-		if(!is_null($client))
-		{
-			$this->client = $client;
-		}
+//		if(!is_null($client))
+//		{
+//			$this->client = $client;
+//		}
 		
 		$products = $this->client->products;
 		$chartData = array();

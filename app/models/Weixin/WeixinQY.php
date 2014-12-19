@@ -2,7 +2,7 @@
 
 use Weixin\Utils\WXBizMsgCrypt;
 
-class Weixin {
+class WeixinQY {
 	
 	private $corp_id;
 	private $secret;
@@ -53,8 +53,6 @@ class Weixin {
 	
 	function call($url, $data = null, $method = 'GET'){
 		
-		error_log('Calling Weixin API: ' . $url);
-		
 		if(!is_null($data) && $method === 'GET'){
 			$method = 'POST';
 		}
@@ -95,8 +93,10 @@ class Weixin {
 	 */
 	function get_access_token(){
 		
-		$stored = $this->company->config('wx_access_token');
+		$access_token_config = ConfigModel::firstOrCreate(array('key'=>'wx_access_token'));
 
+		$stored = json_decode($access_token_config->value);
+		
 		if($stored && $stored->expires_at > time()){
 			return $stored->token;
 		}
@@ -109,7 +109,8 @@ class Weixin {
 		$return = $this->call('https://qyapi.weixin.qq.com/cgi-bin/gettoken?' . http_build_query($query_args));
 		
 		if($return->access_token){
-			$this->company->config('wx_access_token', array('token'=>$return->access_token, 'expires_at'=>time() + $return->expires_in - 60));
+			$access_token_config->value = json_encode(array('token'=>$return->access_token, 'expires_at'=>time() + $return->expires_in - 60));
+			$access_token_config->save();
 			return $return->access_token;
 		}
 		
@@ -201,7 +202,7 @@ class Weixin {
 		
 		$query_args = array(
 			'appid'=>$this->corp_id,
-			'redirect_uri'=>is_null($redirect_uri) ? current_url() : $redirect_uri,
+			'redirect_uri'=>is_null($redirect_uri) ? URL::current() : $redirect_uri,
 			'response_type'=>'code',
 			'scope'=>$scope,
 			'state'=>$state
@@ -247,7 +248,7 @@ class Weixin {
 		
 		$query_vars = array(
 			'access_token'=>$this->get_access_token(),
-			'code'=>Request::get('code'),
+			'code'=>$code,
 			'agentid'=>$this->agent_id
 		);
 		
@@ -256,65 +257,6 @@ class Weixin {
 		$user_info = $this->call($url);
 		
 		return $user_info;
-	}
-	
-	/**
-	 * 生成一个带参数二维码的信息
-	 * @param int $scene_id $action_name 为 'QR_LIMIT_SCENE' 时为最大为100000（目前参数只支持1-100000）
-	 * @param array $action_info
-	 * @param string $action_name 'QR_LIMIT_SCENE' | 'QR_SCENE'
-	 * @param int $expires_in
-	 * @return array 二维码信息，包括获取的URL和有效期等
-	 */
-	function generate_qr_code($action_info = array(), $action_name = 'QR_SCENE', $expires_in = '1800'){
-		// TODO 过期scene应该要回收
-		// TODO scene id 到达100000后无法重置
-		// TODO QR_LIMIT_SCENE只能有100000个
-		$url = 'https://qyapi.weixin.qq.com/cgi-bin/qrcode/create?access_token=' . $this->get_access_token();
-		
-		$scene_id = $this->company->config('wx_last_qccode_scene_id', 0) + 1;
-		
-		if($scene_id > 100000){
-			$scene_id = 1; // 强制重置
-		}
-		
-		$action_info['scene']['scene_id'] = $scene_id;
-		
-		$post_data = array(
-			'expire_seconds'=>$expires_in,
-			'action_name'=>$action_name,
-			'action_info'=>$action_info,
-		);
-		
-		$ch = curl_init($url);
-		
-		curl_setopt_array($ch, array(
-			CURLOPT_POST => TRUE,
-			CURLOPT_RETURNTRANSFER => TRUE,
-			CURLOPT_HTTPHEADER => array(
-				'Content-Type: application/json'
-			),
-			CURLOPT_POSTFIELDS => json_encode($post_data)
-		));
-		
-		$response = json_decode(curl_exec($ch));
-		
-		if(!property_exists($response, 'ticket')){
-			return $response;
-		}
-		
-		$qrcode = array(
-			'url'=>'https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket=' . urlencode($response->ticket),
-			'expires_at'=>time() + $response->expire_seconds,
-			'action_info'=>$action_info,
-			'ticket'=>$response->ticket
-		);
-		
-		$this->company->config('wx_qrscene_' . $scene_id, $qrcode);
-		$this->company->config('wx_last_qccode_scene_id', $scene_id);
-		
-		return $qrcode;
-		
 	}
 	
 	function on_message($type, $callback){
