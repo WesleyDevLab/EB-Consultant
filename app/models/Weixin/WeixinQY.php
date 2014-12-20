@@ -71,7 +71,7 @@ class WeixinQY {
 					CURLOPT_HTTPHEADER => array(
 						'Content-Type: application/json'
 					),
-					CURLOPT_POSTFIELDS => json_encode($data)
+					CURLOPT_POSTFIELDS => json_encode($data, JSON_UNESCAPED_UNICODE)
 				));
 
 				$response = curl_exec($ch);
@@ -349,6 +349,19 @@ class WeixinQY {
 	
 	function transfer_customer_service($received_message){
 		return View::make('weixin/transfer_customer_service', compact('received_message'));
+	}
+	
+	function send_message($to, $message, $type = 'text'){
+		$result = $this->call('https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token=' . $this->get_access_token(), array(
+			'touser'=>$to,
+			'msgtype'=>$type,
+			'agentid'=>0,
+			'text'=>array(
+				'content'=>$message
+			)
+		));
+		
+		return $result;
 	}
 	
 }

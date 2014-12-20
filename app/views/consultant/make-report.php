@@ -23,9 +23,9 @@
 	<button type="submit" class="btn btn-primary">提交</button>
 </form>
 <?php } else{ ?>
-<ul class="list-unstyled">
+<ul class="nav nav-pills nav-stacked">
 	<?php foreach($products as $product){ ?>
-	<li><a href="<?=url('make-report/' . $product->id)?>"><?=$product->name?>, <?=$product->type?></li>
+	<li role="presentation"><a href="<?=url('make-report/' . $product->id)?>"><?=$product->name?>, <?=$product->type?></li>
 	<?php } ?>
 </ul>
 <?php } ?>

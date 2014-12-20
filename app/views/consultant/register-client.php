@@ -54,7 +54,7 @@
 			<textarea name="comments" class="form-control"></textarea>
 		</div>
 	</div>
-	<button type="submit" class="btn btn-primary">登记</button>
+	<button type="submit" class="btn btn-primary btn-lg btn-block">登记</button>
 </form>
 <script type="text/javascript">
 	jQuery(function($){

@@ -9,11 +9,17 @@ class ConsultantController extends BaseController {
 		$wx = new Weixin();
 	}
 	
+	protected function _weixinLogin(){
+		$weixin = new WeixinQY();
+		
+	}
+
 	public function signup()
 	{
-		$weixin_qy = new WeixinQY();
-		if(!Session::get('weixin.user_id')){
-			$weixin_user_info = $weixin_qy->oauth_get_user_info();
+		$weixin = new WeixinQY();
+		if(!Session::get('weixin.user_id'))
+		{
+			$weixin_user_info = $weixin->oauth_get_user_info();
 			Session::set('weixin.user_id', $weixin_user_info->UserId);
 		}
 
@@ -36,9 +42,18 @@ class ConsultantController extends BaseController {
 	public function registerClient()
 	{
 		
-		if(Session::get('user.id') && Session::get('user.type') === 'consultant')
+		$weixin = new WeixinQY();
+		
+		if(!Session::get('weixin.user_id'))
 		{
-			$this->consultant = Consultant::find(Session::get('user.id'));
+			$weixin_user_info = $weixin->oauth_get_user_info();
+			Session::set('weixin.user_id', $weixin_user_info->UserId);
+		}
+		
+		$this->consultant = Consultant::where('open_id', Session::get('weixin.user_id'))->first();
+		
+		if(!$this->consultant){
+			return 'error: consultant not logged in';
 		}
 		
 		if(Input::method() === 'POST')
@@ -56,11 +71,10 @@ class ConsultantController extends BaseController {
 			$client->save();
 			$client->products()->save($product);
 			
-			$weixin = new Weixin();
-			
-			
+			$weixin = new WeixinQY();
 			$client->consultants()->save($this->consultant);
 			
+			$weixin->send_message($this->consultant->open_id, '客户 ' . $client->name . ' 登记成功，请客户在以下地址注册:' . 'http://client.ebillion.com.cn/signup?invite=' . $client->open_id);
 			return Redirect::to('make-report/' . $product->id);
 		}
 		return View::make('consultant/register-client');
@@ -68,22 +82,27 @@ class ConsultantController extends BaseController {
 	
 	public function makeReport(Product $product = null)
 	{
-//		Session::set('user.id', 1);
-//		Session::set('user.type', 'consultant');
+		$weixin = new WeixinQY();
 		
-		if(Session::get('user.id') && Session::get('user.type') === 'consultant'){
-			$this->consultant = Consultant::find(Session::get('user.id'));
+		if(!Session::get('weixin.user_id'))
+		{
+			$weixin_user_info = $weixin->oauth_get_user_info();
+			Session::set('weixin.user_id', $weixin_user_info->UserId);
 		}
 		
-		if(is_null($this->consultant)){
+		$this->consultant = Consultant::where('open_id', Session::get('weixin.user_id'))->first();
+		
+		if(!$this->consultant){
 			return 'error: consultant not logged in';
 		}
 		
-		if(is_null($product)){
+		if(is_null($product))
+		{
 			$products = $this->consultant->products;
 		}
 		
-		if(Input::method() === 'POST'){
+		if(Input::method() === 'POST')
+		{
 			$quote = new Quote();
 			$quote->fill(Input::all());
 			$quote->product()->associate($product);
