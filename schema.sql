@@ -44,10 +44,10 @@ CREATE TABLE IF NOT EXISTS `consultants` (
 
 CREATE TABLE IF NOT EXISTS `products` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `consultant_id` int(11) NOT NULL,
+  `consultant_id` int(11) DEFAULT NULL,
   `name` varchar(255) NOT NULL,
   `type` varchar(255) NOT NULL,
-  `metas` text DEFAULT NULL,
+  `meta` text DEFAULT NULL,
   `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `created_at` timestamp NOT NULL,
   PRIMARY KEY (`id`),
@@ -63,7 +63,8 @@ CREATE TABLE IF NOT EXISTS `quotes` (
   `product_id` int(11) NOT NULL,
   `name` varchar(255) NOT NULL,
   `date` date NOT NULL,
-  `value` decimal(15,4) NOT NULL,
+  `value` decimal(13,2) NOT NULL,
+  `data` text DEFAULT NULL,
   `comments` text DEFAULT NULL,
   `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `created_at` timestamp NOT NULL,
@@ -71,6 +72,7 @@ CREATE TABLE IF NOT EXISTS `quotes` (
   KEY `updated_at` (`updated_at`),
   KEY `created_at` (`created_at`),
   KEY `name` (`name`),
+  KEY `date` (`date`),
   KEY `product_id` (`product_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

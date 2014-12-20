@@ -22,7 +22,7 @@ class WeixinQY {
 			'token',
 			'encoding_aes_key',
 		) as $item){
-			$this->$item = Config::get('weixin.' . $item);
+			$this->$item = Config::get('weixin.consultant.' . $item);
 		}
 		
 		$this->wxcpt = new WXBizMsgCrypt($this->token, $this->encoding_aes_key, $this->corp_id);

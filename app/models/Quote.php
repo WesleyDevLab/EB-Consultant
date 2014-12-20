@@ -2,7 +2,7 @@
 
 class Quote extends Eloquent {
 	
-	protected $fillable = array('date', 'value', 'comments');
+	protected $fillable = array('date', 'value', 'comments', 'data');
 			
 	function product()
 	{
@@ -15,4 +15,8 @@ class Quote extends Eloquent {
 		return $columns;
 	}
 	
+	function scopeDateAscending($query) {
+		return $query->orderBy('date', 'ASC');
+	}
+
 }

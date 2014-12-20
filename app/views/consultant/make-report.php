@@ -1,5 +1,5 @@
 <?php echo View::make('header'); ?>
-<h1>净值报告</h1>
+<h1 class="text-center">净值报告</h1>
 <?php if(isset($product)){ ?>
 <form class="form-horizontal" role="form" method="post">
 	<div class="form-group">
@@ -20,7 +20,7 @@
 			<textarea name="comments" class="form-control"></textarea>
 		</div>
 	</div>
-	<button type="submit" class="btn btn-primary">提交</button>
+	<button type="submit" class="btn btn-primary btn-lg btn-block">提交</button>
 </form>
 <?php } else{ ?>
 <ul class="nav nav-pills nav-stacked">

@@ -2,7 +2,7 @@
 
 class Product extends Eloquent {
 	
-	protected $fillable = array('name', 'type', 'metas');
+	protected $fillable = array('name', 'type', 'meta');
 			
 	function clients()
 	{

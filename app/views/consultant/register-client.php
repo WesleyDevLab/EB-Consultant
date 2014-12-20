@@ -1,5 +1,5 @@
 <?php echo View::make('header'); ?>
-<h1>私募客户登记</h1>
+<h1 class="text-center">私募客户登记</h1>
 <form class="form-horizontal" role="form" method="post">
 	<div class="form-group">
 		<label class="control-label col-sm-2">名称</label>
@@ -19,32 +19,32 @@
 	<div class="form-group">
 		<label class="control-label col-sm-2">开户券商营业部</label>
 		<div class="col-sm-10">
-			<input name="metas[开户券商营业部]" class="form-control">
+			<input name="meta[开户券商营业部]" class="form-control">
 		</div>
 	</div>
 	<div class="form-group">
 		<label class="control-label col-sm-2">登陆账号</label>
 		<div class="col-sm-10">
-			<input name="metas[登陆账号]" class="form-control">
+			<input name="meta[登陆账号]" class="form-control">
 		</div>
 	</div>
 	<fieldset id="umbrella-account" style="display:none" disabled="disabled">
 		<div class="form-group">
 			<label class="control-label col-sm-2">总净值</label>
 			<div class="col-sm-10">
-				<input name="metas[总净值]" class="form-control">
+				<input name="meta[总净值]" class="form-control">
 			</div>
 		</div>
 		<div class="form-group">
 			<label class="control-label col-sm-2">杠杆配比</label>
 			<div class="col-sm-10">
-				<input name="metas[杠杆配比]" class="form-control">
+				<input name="meta[杠杆配比]" class="form-control">
 			</div>
 		</div>
 		<div class="form-group">
 			<label class="control-label col-sm-2">优先资金总成本</label>
 			<div class="col-sm-10">
-				<input name="metas[优先资金总成本]" class="form-control">
+				<input name="meta[优先资金总成本]" class="form-control">
 			</div>
 		</div>
 	</fieldset>

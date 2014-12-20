@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html>
 	<head>
+		<meta charset="UTF-8">
+		<title>EB投顾报告平台</title>
+		
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, minimal-ui" />
 		<meta name="apple-mobile-web-app-capable" content="yes" />
 		<meta name="apple-mobile-web-app-status-bar-style" content="black" />
@@ -23,8 +26,8 @@
 		<meta name="msapplication-tap-highlight" content="no">
 		
 		<link rel="stylesheet" type="text/css" href="<?=url()?>/packages/bootstrap/dist/css/bootstrap.min.css">
-		<link rel="stylesheet" type="text/css" href="<?=url()?>/packages/fontawesome/css/font-awesome.min.css">
-		<link rel="stylesheet" type="text/css" href="<?=url()?>/style.css">
+<!--		<link rel="stylesheet" type="text/css" href="<?=url()?>/packages/fontawesome/css/font-awesome.min.css">
+		<link rel="stylesheet" type="text/css" href="<?=url()?>/style.css">-->
 		
 		<script type="text/javascript" src="<?=url()?>/packages/jquery/dist/jquery.min.js"></script>
 		<script type="text/javascript" src="<?=url()?>/packages/bootstrap/dist/js/bootstrap.min.js"></script>
