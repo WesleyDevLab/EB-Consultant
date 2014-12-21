@@ -2,7 +2,7 @@
 
 class Consultant extends Eloquent {
 	
-	protected $fillable = array('name', 'description', 'open_id');
+	protected $fillable = array('name', 'meta', 'open_id');
 			
 	function clients()
 	{

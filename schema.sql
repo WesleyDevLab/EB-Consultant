@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS `clients` (
 CREATE TABLE IF NOT EXISTS `consultants` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
-  `description` TEXT DEFAULT NULL,
+  `meta` TEXT DEFAULT NULL,
   `open_id` varchar(255) NOT NULL DEFAULT '',
   `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `created_at` timestamp NOT NULL,

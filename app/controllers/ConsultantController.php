@@ -26,7 +26,8 @@ class ConsultantController extends BaseController {
 		if(Input::method() === 'POST' && !$this->consultant)
 		{
 			$this->consultant = new Consultant();
-			$this->consultant->fill(Input::all());
+			$this->consultant->name = Input::get('name');
+			$this->consultant->meta = json_encode(Input::get('meta'));
 			$this->consultant->open_id = Session::get('weixin.user_id');
 			$this->consultant->save();
 			
