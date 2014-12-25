@@ -1,5 +1,7 @@
 <?php echo View::make('header'); ?>
-<h1 class="text-center">净值报告</h1>
+<div class="page-header">
+	<h2 class="text-center">净值报告</h2>
+</div>
 <ul class="list-unstyled">
 	<?php foreach($products as $product){ ?>
 	<li>
