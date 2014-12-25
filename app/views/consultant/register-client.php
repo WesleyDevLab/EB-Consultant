@@ -96,7 +96,7 @@
 			<label class="control-label col-sm-2">信托通道费率*</label>
 			<div class="col-sm-10">
 				<div class="input-group">
-					<input name="meta[信托通道费率]" required class="form-control">
+					<input type="number" name="meta[信托通道费率]" required class="form-control">
 					<div class="input-group-addon">%</div>
 				</div>
 			</div>
@@ -105,7 +105,7 @@
 			<label class="control-label col-sm-2">银行托管费率*</label>
 			<div class="col-sm-10">
 				<div class="input-group">
-					<input name="meta[银行托管费率]" required class="form-control">
+					<input type="number" name="meta[银行托管费率]" required class="form-control">
 					<div class="input-group-addon">%</div>
 				</div>
 			</div>
@@ -123,7 +123,7 @@
 			<label class="control-label col-sm-2">优先资金成本*</label>
 			<div class="col-sm-10">
 				<div class="input-group">
-					<input name="meta[优先资金成本]" required class="form-control">
+					<input type="number" name="meta[优先资金成本]" required class="form-control">
 					<div class="input-group-addon">%</div>
 				</div>
 			</div>

@@ -31,6 +31,7 @@ CREATE TABLE IF NOT EXISTS `clients` (
 CREATE TABLE IF NOT EXISTS `consultants` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
+  `type` varchar(15) NOT NULL,
   `meta` TEXT DEFAULT NULL,
   `open_id` varchar(255) NOT NULL DEFAULT '',
   `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -39,7 +40,8 @@ CREATE TABLE IF NOT EXISTS `consultants` (
   KEY `updated_at` (`updated_at`),
   KEY `created_at` (`created_at`),
   KEY `open_id` (`open_id`),
-  KEY `name` (`name`)
+  KEY `name` (`name`),
+  KEY `type` (`type`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `products` (
@@ -48,6 +50,7 @@ CREATE TABLE IF NOT EXISTS `products` (
   `name` varchar(255) NOT NULL,
   `type` varchar(255) NOT NULL,
   `meta` text DEFAULT NULL,
+  `initial_amount` decimal(13,2) DEFAULT NULL,
   `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `created_at` timestamp NOT NULL,
   PRIMARY KEY (`id`),
@@ -63,7 +66,7 @@ CREATE TABLE IF NOT EXISTS `quotes` (
   `product_id` int(11) NOT NULL,
   `name` varchar(255) NOT NULL,
   `date` date NOT NULL,
-  `value` decimal(13,2) NOT NULL,
+  `value` decimal(10,4) NOT NULL,
   `data` text DEFAULT NULL,
   `comments` text DEFAULT NULL,
   `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
