@@ -34,7 +34,7 @@ class Product extends Eloquent {
 		$cost = 0.00;
 		
 		if($this->type === '伞型'){
-			$cost = $this->initial_cap * ($meta->银行托管费率 + $meta->信托通道费率 + $meta->优先资金成本) / 100 * $days_passed / 365;
+			$cost = $this->initial_cap / ($meta->杠杆配比 + 1) * $meta->杠杆配比 * ($meta->银行托管费率 + $meta->信托通道费率 + $meta->优先资金成本) / 100 * ($days_passed + 1) / 365;
 		}
 		
 		return round($cost, 2);

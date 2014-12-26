@@ -64,12 +64,13 @@ class ConsultantController extends BaseController {
 			$product->initial_cap = $product->type === '单账户' ? Input::get('meta.起始资金规模') : Input::get('meta.劣后资金规模') * (1 + Input::get('meta.杠杆配比'));
 			$product->start_date = Input::get('start_date');
 			$product->consultant()->associate($this->consultant);
+			$product->save();
+			
 			$product->quotes()->create(array(
 				'date'=>$product->start_date,
 				'value'=>1,
 				'cap'=>$product->initial_cap
 			));
-			$product->save();
 			
 			$client = new Client();
 			$client->name = Input::get('name');
@@ -116,7 +117,11 @@ class ConsultantController extends BaseController {
 			$quote->value = Input::get('cap') / $product->initial_cap;
 			$quote->product()->associate($product);
 			$quote->save();
-			return Redirect::to('make-report');
+			
+			if(!Input::get('continue')){
+				return Redirect::to('make-report');
+			}
+			
 		}
 		
 		return View::make('consultant/make-report', compact('products', 'product'));

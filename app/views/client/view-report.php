@@ -3,8 +3,8 @@
 	<h2 class="text-center">净值报告</h2>
 </div>
 <ul>
-	<li>成本：¥<?=$products[0]->getCost()?></li>
-	<li>浮盈：<?=round(($products[0]->quotes()->dateDescending()->first()->cap - $products[0]->initial_cap) / $products[0]->initial_cap * 100, 2)?>%</li>
+	<li>累计成本：¥<?=$products[0]->getCost()?>（仅供参考）</li>
+	<li>浮动盈亏：<?=round(($products[0]->quotes()->dateDescending()->first()->cap - $products[0]->initial_cap) / $products[0]->initial_cap * 100, 2)?>%</li>
 </ul>
 
 <ul class="list-unstyled">
