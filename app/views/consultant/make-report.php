@@ -15,7 +15,7 @@
 		<div class="col-sm-10">
 			<div class="input-group">
 				<div class="input-group-addon">人民币</div>
-				<input type="number" step="0.01" min="0" name="amount" class="form-control">
+				<input type="number" step="0.01" min="0" name="cap" class="form-control">
 				<div class="input-group-addon">元</div>
 			</div>
 		</div>

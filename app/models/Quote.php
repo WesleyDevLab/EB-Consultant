@@ -2,7 +2,7 @@
 
 class Quote extends Eloquent {
 	
-	protected $fillable = array('date', 'value', 'comments', 'data');
+	protected $fillable = array('date', 'value', 'cap', 'comments', 'data');
 			
 	function product()
 	{

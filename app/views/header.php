@@ -29,9 +29,9 @@
 <!--		<link rel="stylesheet" type="text/css" href="<?=url()?>/packages/fontawesome/css/font-awesome.min.css">
 		<link rel="stylesheet" type="text/css" href="<?=url()?>/style.css">-->
 		<style type="text/css">
-			header { padding: 1px; height: 1px; background: #A700D5; }
+			header { padding: 1px; height: 1px; background: #A700D5; margin-bottom: 10px; }
 			footer { padding: 10px; }
-			.page-header { margin-top: 30px; }
+			.page-header { margin-top: 20px; }
 		</style>
 		
 		<script type="text/javascript" src="<?=url()?>/packages/jquery/dist/jquery.min.js"></script>

@@ -28,9 +28,15 @@
 		<label class="control-label col-sm-2">投顾分成比例*</label>
 		<div class="col-sm-10">
 			<div class="input-group">
-				<input type="number" name="meta[投顾分成比例]" min="0" max="100" step="1" required class="form-control">
+				<input type="number" name="meta[投顾分成比例]" min="0" max="100" step="0.1" required class="form-control">
 				<div class="input-group-addon">%</div>
 			</div>
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="control-label col-sm-2">产品成立日期*</label>
+		<div class="col-sm-10">
+			<input type="date" name="start_date" required class="form-control">
 		</div>
 	</div>
 	<fieldset id="single">
@@ -47,11 +53,7 @@
 		<div class="form-group">
 			<label class="control-label col-sm-2">平仓线*</label>
 			<div class="col-sm-10">
-				<div class="input-group">
-					<div class="input-group-addon">-</div>
-					<input type="number" step="0.1" min="0" max="100" name="meta[平仓线]" required class="form-control">
-					<div class="input-group-addon">%</div>
-				</div>
+				<input type="number" step="0.0001" name="meta[平仓线]" required class="form-control">
 			</div>
 		</div>
 	</fieldset>
@@ -69,21 +71,13 @@
 		<div class="form-group">
 			<label class="control-label col-sm-2">预警线*</label>
 			<div class="col-sm-10">
-				<div class="input-group">
-					<div class="input-group-addon">-</div>
-					<input type="number" step="0.1" min="0" max="100" name="meta[预警线]" required class="form-control">
-					<div class="input-group-addon">%</div>
-				</div>
+				<input type="number" step="0.0001" name="meta[预警线]" required class="form-control">
 			</div>
 		</div>
 		<div class="form-group">
 			<label class="control-label col-sm-2">平仓线*</label>
 			<div class="col-sm-10">
-				<div class="input-group">
-					<div class="input-group-addon">-</div>
-					<input type="number" step="0.1" min="0" max="100" name="meta[平仓线]" required class="form-control">
-					<div class="input-group-addon">%</div>
-				</div>
+				<input type="number" step="0.0001" name="meta[平仓线]" required class="form-control">
 			</div>
 		</div>
 		<div class="form-group">
@@ -96,7 +90,7 @@
 			<label class="control-label col-sm-2">信托通道费率*</label>
 			<div class="col-sm-10">
 				<div class="input-group">
-					<input type="number" name="meta[信托通道费率]" required class="form-control">
+					<input type="number" step="0.01" name="meta[信托通道费率]" required class="form-control">
 					<div class="input-group-addon">%</div>
 				</div>
 			</div>
@@ -105,7 +99,7 @@
 			<label class="control-label col-sm-2">银行托管费率*</label>
 			<div class="col-sm-10">
 				<div class="input-group">
-					<input type="number" name="meta[银行托管费率]" required class="form-control">
+					<input type="number" step="0.01" name="meta[银行托管费率]" required class="form-control">
 					<div class="input-group-addon">%</div>
 				</div>
 			</div>
@@ -115,7 +109,7 @@
 			<div class="col-sm-10">
 				<div class="input-group">
 					<div class="input-group-addon">1 : </div>
-					<input type="number" name="meta[杠杆配比]" required class="form-control">
+					<input type="number" step="1" name="meta[杠杆配比]" required class="form-control">
 				</div>
 			</div>
 		</div>
@@ -123,7 +117,7 @@
 			<label class="control-label col-sm-2">优先资金成本*</label>
 			<div class="col-sm-10">
 				<div class="input-group">
-					<input type="number" name="meta[优先资金成本]" required class="form-control">
+					<input type="number" step="0.01" name="meta[优先资金成本]" required class="form-control">
 					<div class="input-group-addon">%</div>
 				</div>
 			</div>

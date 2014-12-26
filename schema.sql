@@ -50,7 +50,8 @@ CREATE TABLE IF NOT EXISTS `products` (
   `name` varchar(255) NOT NULL,
   `type` varchar(255) NOT NULL,
   `meta` text DEFAULT NULL,
-  `initial_amount` decimal(13,2) DEFAULT NULL,
+  `initial_cap` decimal(13,2) DEFAULT NULL,
+  `start_date` date NOT NULL,
   `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `created_at` timestamp NOT NULL,
   PRIMARY KEY (`id`),
@@ -64,9 +65,9 @@ CREATE TABLE IF NOT EXISTS `products` (
 CREATE TABLE IF NOT EXISTS `quotes` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `product_id` int(11) NOT NULL,
-  `name` varchar(255) NOT NULL,
   `date` date NOT NULL,
-  `value` decimal(10,4) NOT NULL,
+  `value` decimal(9,4) NOT NULL,
+  `cap` decimal(13,2) NOT NULL,
   `data` text DEFAULT NULL,
   `comments` text DEFAULT NULL,
   `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -74,7 +75,6 @@ CREATE TABLE IF NOT EXISTS `quotes` (
   PRIMARY KEY (`id`),
   KEY `updated_at` (`updated_at`),
   KEY `created_at` (`created_at`),
-  KEY `name` (`name`),
   KEY `date` (`date`),
   KEY `product_id` (`product_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
