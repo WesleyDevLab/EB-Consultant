@@ -48,7 +48,7 @@ class ClientController extends BaseController {
 		}
 		
 		$sh300 = Product::where('name', '沪深300指数')->first();
-		$quotes = $sh300 ? $sh300->quotes()->dateAscending()->get() : array();
+		$quotes = $sh300 ? $sh300->quotes()->where('date', '>', $products[0]->start_date)->dateAscending()->get() : array();
 		$chartData['sh300'] = array();
 		foreach($quotes as $quote){
 			$chartData['sh300'][] = array(strtotime($quote->date) * 1000, round($quote->value, 2));
