@@ -13,7 +13,7 @@
 				</tr>
 			</thead>
 			<tbody>
-				<?php foreach($product->quotes()->dateAscending()->get() as $quote){ ?>
+				<?php foreach($product->quotes()->dateDescending()->get() as $quote){ ?>
 				<tr>
 					<td><?=$quote->date->toDateString()?></td>
 					<td><?=$quote->value?></td>

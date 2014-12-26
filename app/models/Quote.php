@@ -15,8 +15,14 @@ class Quote extends Eloquent {
 		return $columns;
 	}
 	
-	function scopeDateAscending($query) {
+	function scopeDateAscending($query)
+	{
 		return $query->orderBy('date', 'ASC');
+	}
+	
+	function scopeDateDescending($query)
+	{
+		return $query->orderBy('date', 'DESC');
 	}
 
 }
