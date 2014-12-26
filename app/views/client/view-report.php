@@ -2,6 +2,11 @@
 <div class="page-header">
 	<h2 class="text-center">净值报告</h2>
 </div>
+<ul>
+	<li>成本：¥<?=$products[0]->getCost()?></li>
+	<li>浮盈：<?=round(($products[0]->quotes()->dateDescending()->first()->cap - $products[0]->initial_cap) / $products[0]->initial_cap * 100, 2)?>%</li>
+</ul>
+
 <ul class="list-unstyled">
 	<?php foreach($products as $product){ ?>
 	<li>
@@ -9,7 +14,8 @@
 			<thead>
 				<tr>
 					<th>日期</th>
-					<th>本账户</th>
+					<th>净值</th>
+					<th>市值</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -17,6 +23,7 @@
 				<tr>
 					<td><?=$quote->date->toDateString()?></td>
 					<td><?=$quote->value?></td>
+					<td>¥<?=$quote->cap?></td>
 				</tr>
 				<?php } ?>
 			</tbody>
