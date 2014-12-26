@@ -11,8 +11,8 @@
 	</div>
 	<div class="form-group">
 		<label class="control-label col-sm-2">类型*</label>
-		<div class="col-sm-offset-2 col-sm-10 row">
-			<div class="btn-group col-xs-12" data-toggle="buttons">
+		<div class="col-sm-offset-2 col-sm-10">
+			<div class="btn-group btn-block" data-toggle="buttons">
 				<label class="btn btn-default col-xs-6 active">
 					<input type="radio" name="type" value="单账户" checked="checked" required>
 					单账户

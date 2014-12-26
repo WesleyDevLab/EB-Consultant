@@ -5,8 +5,8 @@
 </div>
 <form class="form-horizontal" role="form" method="post">
 	<div class="form-group">
-		<div class="col-sm-offset-2 col-sm-10 row">
-			<div class="btn-group col-xs-12" data-toggle="buttons">
+		<div class="col-sm-offset-2 col-sm-10">
+			<div class="btn-group btn-block" data-toggle="buttons">
 				<label class="btn btn-default col-xs-6">
 					<input type="radio" name="type" value="机构" required>
 					机构
