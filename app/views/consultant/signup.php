@@ -179,6 +179,14 @@
 			<textarea name="meta[投资风格和策略]" required class="form-control"></textarea>
 		</div>
 	</div>
+	<div class="form-group">
+		<div class="col-sm-offset-2 col-sm-10">
+			<label class="checkbox-inline">
+				<input type="checkbox" id="agreement">
+				本人/本公司承诺将主动推送相关信息用于“翊弼-私募产品统计平台”的展示，并就所提供信息的真实性、有效性和自愿性负责。
+			</label>
+		</div>
+	</div>
 	<button type="submit" class="btn btn-primary btn-block btn-lg">注册</button>
 </form>
 <?php }else{ ?>
@@ -198,6 +206,12 @@
 		});
 		
 		$('[name="type"]:checked').trigger('change');
+		
+		$('form').on('submit', function(){
+			if(!$('#agreement').is(':checked')){
+				return false;
+			}
+		});
 		
 	});
 </script>
