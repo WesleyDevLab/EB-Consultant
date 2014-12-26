@@ -3,34 +3,29 @@
 	<h2 class="text-center">净值报告</h2>
 </div>
 <ul>
-	<li>累计成本：¥<?=$products[0]->getCost()?>（仅供参考）</li>
-	<li>浮动盈亏：<?=round(($products[0]->quotes()->dateDescending()->first()->cap - $products[0]->initial_cap) / $products[0]->initial_cap * 100, 2)?>%</li>
+	<li>累计成本：¥<?=$product->getCost()?>（仅供参考）</li>
+	<li>浮动盈亏：<?=round(($product->quotes()->dateDescending()->first()->cap - $product->initial_cap) / $product->initial_cap * 100, 2)?>%</li>
 </ul>
 
-<ul class="list-unstyled">
-	<?php foreach($products as $product){ ?>
-	<li>
-		<table class="table table-bordered table-striped">
-			<thead>
-				<tr>
-					<th>日期</th>
-					<th>净值</th>
-					<th>市值</th>
-				</tr>
-			</thead>
-			<tbody>
-				<?php foreach($product->quotes()->dateDescending()->get() as $quote){ ?>
-				<tr>
-					<td><?=$quote->date->toDateString()?></td>
-					<td><?=$quote->value?></td>
-					<td>¥<?=$quote->cap?></td>
-				</tr>
-				<?php } ?>
-			</tbody>
-		</table>
-	</li>
-	<?php } ?>
-</ul>
+<table class="table table-bordered table-striped">
+	<thead>
+		<tr>
+			<th>日期</th>
+			<th>净值</th>
+			<th>市值</th>
+		</tr>
+	</thead>
+	<tbody>
+		<?php foreach($product->quotes()->dateDescending()->get() as $quote){ ?>
+		<tr>
+			<td><?=$quote->date->toDateString()?></td>
+			<td><?=$quote->value?></td>
+			<td>¥<?=$quote->cap?></td>
+		</tr>
+		<?php } ?>
+	</tbody>
+</table>
+
 <div id="chart"></div>
 <script type="text/javascript" src="<?=url()?>/packages/highstock-release/highstock.js"></script>
 <script type="text/javascript">
@@ -48,7 +43,7 @@
 			 
 			series: [{
 				name: '本账户',
-				data: <?=json_encode($chartData[$products[0]->id])?>,
+				data: <?=json_encode($chartData[$product->id])?>,
 				tooltip: {
 					valueDecimals: 2
 				}

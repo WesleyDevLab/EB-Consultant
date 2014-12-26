@@ -24,6 +24,7 @@ Route::group(array('domain' => 'consultant.ebillion.com.cn'), function()
 	Route::any('signup', 'ConsultantController@signup');
 	Route::any('register-client', 'ConsultantController@registerClient');
 	Route::any('make-report/{product?}', 'ConsultantController@makeReport');
+	Route::any('view-report/{product}', 'ConsultantController@viewReport');
 });
 
 Route::group(array('domain' => 'client.ebillion.com.cn'), function()

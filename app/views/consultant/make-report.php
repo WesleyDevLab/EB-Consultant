@@ -27,7 +27,8 @@
 		</div>
 	</div>
 	<button type="submit" class="btn btn-primary btn-lg">提交</button>
-	<button type="submit" name="continue" value="1" class="btn btn-default btn-lg">提交并继续填写</button>
+	<button type="submit" name="continue" value="1" class="btn btn-default btn-lg">提交并继续</button>
+	<a href="<?=url()?>/view-report/<?=$product->id?>" class="btn btn-info btn-lg">查看</a>
 </form>
 <?php } else{ ?>
 <ul class="nav nav-pills nav-stacked">

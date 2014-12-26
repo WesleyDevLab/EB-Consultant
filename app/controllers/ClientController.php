@@ -38,23 +38,21 @@ class ClientController extends BaseController {
 			return 'error: client not existed';
 		}
 		
-		$products = $this->client->products;
+		$product = $this->client->products()->first();
 		$chartData = array();
 		
-		foreach($products as $product){
-			foreach($product->quotes()->dateAscending()->get() as $quote){
-				$chartData[$product->id][] = array(strtotime($quote->date) * 1000, round($quote->value, 2));
-			}
+		foreach($product->quotes()->dateAscending()->get() as $quote){
+			$chartData[$product->id][] = array(strtotime($quote->date) * 1000, round($quote->value, 2));
 		}
 		
 		$sh300 = Product::where('name', '沪深300指数')->first();
-		$quotes = $sh300 ? $sh300->quotes()->where('date', '>=', $products[0]->start_date)->dateAscending()->get() : array();
+		$quotes = $sh300 ? $sh300->quotes()->where('date', '>=', $product->start_date)->dateAscending()->get() : array();
 		$chartData['sh300'] = array();
 		foreach($quotes as $quote){
 			$chartData['sh300'][] = array(strtotime($quote->date) * 1000, round($quote->value, 2));
 		}
 		
-		return View::make('client/view-report', compact('products', 'chartData'));
+		return View::make('client/view-report', compact('product', 'chartData'));
 	}
 	
 }
