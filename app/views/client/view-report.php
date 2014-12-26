@@ -28,6 +28,15 @@
 <script type="text/javascript" src="<?=url()?>/packages/highstock-release/highstock.js"></script>
 <script type="text/javascript">
 	jQuery(function($){
+		
+		Highcharts.setOptions({
+			lang: {
+				months: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
+				shortMonths: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
+				weekdays: ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六']
+			}
+		});
+		
 		$('#chart').highcharts('StockChart', {
 			 
 			series: [{
@@ -60,17 +69,27 @@
 					color: 'silver'
 				}]
 			},
+			
+			xAxis: {
+				labels: {
+					formatter: function () {
+						return Highcharts.dateFormat('%m.%d', this.value);
+					}
+				}
+			},
 
 			plotOptions: {
 				series: {
 					compare: 'percent'
 				}
 			},
-			tooltip: {
-				pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y}</b> ({point.change}%)<br/>',
-				valueDecimals: 2
-			},
 			navigator: {
+				enabled: false
+			},
+			scrollbar: {
+				enabled: false
+			},
+			credits: {
 				enabled: false
 			}
 		});
