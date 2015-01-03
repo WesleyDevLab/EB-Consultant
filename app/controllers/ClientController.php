@@ -19,7 +19,7 @@ class ClientController extends BaseController {
 		
 		if(!$menu_config->value){
 			$menu = $weixin->get_menu();
-			$menu_config->value = json_encode($menu, JSON_UNESCAPED_UNICODE);
+			$menu_config->value = json_encode($menu->menu, JSON_UNESCAPED_UNICODE);
 			$menu_config->save();
 			return $menu_config->value;
 		}
@@ -32,6 +32,11 @@ class ClientController extends BaseController {
 	
 	public function viewReport()
 	{
+		
+		$weixin = new Weixin();
+		
+		$weixin->oauth_get_user_info();
+		
 		$this->client = Client::where('open_id', Input::get('hash'))->first();
 		
 		if(!$this->client){
