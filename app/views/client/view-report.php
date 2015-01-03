@@ -2,6 +2,12 @@
 <div class="page-header">
 	<h2 class="text-center">净值报告</h2>
 </div>
+<?php if(!$client){ ?>
+<div class="alert alert-warning">
+	你还没有登记成为客户。请使用私募投顾发送给您的链接进入一次系统，之后您可以从平台“净值查询”按钮查询。
+</div>
+<?php } ?>
+<?php if(isset($product)){ ?>
 <ul>
 	<li>累计成本：¥<?=$product->getCost()?>（仅供参考）</li>
 	<li>浮动盈亏：<?=round(($product->quotes()->dateDescending()->first()->cap - $product->initial_cap) / $product->initial_cap * 100, 2)?>%</li>
@@ -25,6 +31,7 @@
 		<?php } ?>
 	</tbody>
 </table>
+<?php } ?>
 
 <div id="chart"></div>
 <script type="text/javascript" src="<?=url()?>/packages/highstock-release/highstock.js"></script>
@@ -41,19 +48,24 @@
 		
 		$('#chart').highcharts('StockChart', {
 			 
-			series: [{
-				name: '本账户',
-				data: <?=json_encode($chartData[$product->id])?>,
-				tooltip: {
-					valueDecimals: 2
+			series: [
+				<?php if(isset($product)){ ?>
+				{
+					name: '本账户',
+					data: <?=json_encode($chartData[$product->id])?>,
+					tooltip: {
+						valueDecimals: 2
+					}
+				},
+				<?php } ?>
+				{
+					name: '沪深300指数',
+					data: <?=json_encode($chartData['sh300'])?>,
+					tooltip: {
+						valueDecimals: 2
+					}
 				}
-			},{
-				name: '沪深300指数',
-				data: <?=json_encode($chartData['sh300'])?>,
-				tooltip: {
-					valueDecimals: 2
-				}
-			}],
+			],
 		
 			rangeSelector: {
 				enabled: false
