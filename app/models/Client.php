@@ -9,8 +9,14 @@ class Client extends Eloquent {
 		return $this->belongsToMany('Consultant');
 	}
 	
-	function products(){
+	function products()
+	{
 		return $this->belongsToMany('Product');
+	}
+	
+	function messages()
+	{
+		return $this->hasMany('Message');
 	}
 	
 }
