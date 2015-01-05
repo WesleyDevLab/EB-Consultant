@@ -81,7 +81,7 @@ class ConsultantController extends BaseController {
 			$weixin = new WeixinQY();
 			$client->consultants()->save($this->consultant);
 			
-			$weixin->send_message($this->consultant->open_id, '客户 ' . $client->name . ' 登记成功，请客户在以下地址查看净值：' . 'http://client.ebillion.com.cn/view-report?hash=' . $client->open_id . '。客户端公众服务号即将上线，敬请期待。');
+			$weixin->send_message($this->consultant->open_id, '客户 ' . $client->name . ' 登记成功，请客户在微信点击以下地址绑定：' . 'http://client.ebillion.com.cn/view-report?hash=' . $client->open_id . '，并关注“翊弼私募产品统计平台”微信公众账号。');
 			return Redirect::to('make-report/' . $product->id);
 		}
 		

@@ -2,7 +2,7 @@
 <div class="page-header">
 	<h2 class="text-center">净值报告</h2>
 </div>
-<?php if(!$client){ ?>
+<?php if(!isset($product)){ ?>
 <div class="alert alert-warning">
 	你还没有登记成为客户。请使用私募投顾发送给您的链接进入一次系统，之后您可以从平台“净值查询”按钮查询。
 </div>
