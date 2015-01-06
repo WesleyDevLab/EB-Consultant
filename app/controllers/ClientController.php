@@ -6,7 +6,7 @@ class ClientController extends BaseController {
 
 	public function serveWeixin()
 	{
-		$weixin = new Weixin();
+		$weixin = new Weixin('client');
 		if(Input::get('echostr')){
 			$weixin->verify();
 		}
@@ -14,7 +14,7 @@ class ClientController extends BaseController {
 	
 	public function updateMenu()
 	{
-		$weixin = new Weixin();
+		$weixin = new Weixin('client');
 		$menu_config = ConfigModel::firstOrCreate(array('key' => 'wx_client_menu'));
 		
 		if(!$menu_config->value){
@@ -34,7 +34,7 @@ class ClientController extends BaseController {
 	{
 		
 		if(!Session::get('weixin.open_id')){
-			$weixin = new Weixin();
+			$weixin = new Weixin('client');
 			$weixin->getOAuthInfo();
 		}
 		

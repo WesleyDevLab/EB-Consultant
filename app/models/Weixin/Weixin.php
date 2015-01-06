@@ -2,9 +2,11 @@
 /**
  * Weixin library for Laravel
  * @author Uice Lu <uicestone@gmail.com>
- * @version 0.52 (2014/1/6)
+ * @version 0.53 (2014/1/6)
  */
 class Weixin {
+	
+	private $account;
 	
 	private $token; // 微信公众账号后台 / 高级功能 / 开发模式 / 服务器配置
 	private $app_id; // 开发模式 / 开发者凭据
@@ -12,9 +14,10 @@ class Weixin {
 	
 	private $message;
 	private $user;
-	
-	public function __construct()
+
+	public function __construct($account = 'default')
 	{
+		$this->account = $account;
 		// 从WordPress配置中获取这些公众账号身份信息
 		foreach(array(
 			'app_id',
@@ -22,8 +25,7 @@ class Weixin {
 			'token'
 		) as $item)
 		{
-			$this->$item = Config::get('weixin.client.' . $item);
-			// TODO: CHANGE THIS to Weixin account identifier in config file.
+			$this->$item = Config::get('weixin.' . $account . '.' . $item);
 		}
 	}
 	
@@ -68,8 +70,7 @@ class Weixin {
 	 */
 	protected function getAccessToken()
 	{
-		$access_token_config = ConfigModel::firstOrCreate(array('key'=>'wx_client_access_token'));
-		// TODO: CHANGE THIS: wx_client_access_token here should be a config item
+		$access_token_config = ConfigModel::firstOrCreate(array('key'=>'wx_' . ($this->account === 'default' ? '' : $this->account . '_') . 'access_token'));
 		$stored = json_decode($access_token_config->value);
 		
 		if($stored && $stored->expires_at > time())
@@ -195,11 +196,10 @@ class Weixin {
 		
 		// 客户未关注，但已经储存在数据表中，将其open_id更新进来
 		// TODO: CHANGE THIS to a common user create and identify function
-		if(Input::get('hash') && $client = User::where('openid', Input::get('hash'))->first())
+		if(Input::get('hash') && $client = Client::where('open_id', Input::get('hash'))->first())
 		{
 			$client->open_id = $auth_result->openid;
 			$client->save();
-			
 		}
 		
 		Session::set('weixin.open_id', $auth_result->openid);
