@@ -2,7 +2,7 @@
 /**
  * Weixin library for Laravel
  * @author Uice Lu <uicestone@gmail.com>
- * @version 0.53 (2014/1/6)
+ * @version 0.61 (2014/1/9)
  */
 class Weixin {
 	
@@ -54,13 +54,43 @@ class Weixin {
 		}
 	}
 	
-	/**
-	 * @todo should implement curl, support POST method and json content type
-	 */
-	protected function call($url)
+	protected function call($url, $data = null, $method = 'GET', $type = 'form-data')
 	{
+		if(!is_null($data) && $method === 'GET'){
+			$method = 'POST';
+		}
+		switch(strtoupper($method)){
+			case 'GET':
+				$response = file_get_contents($url);
+				break;
+			case 'POST':
+				$ch = curl_init($url);
+				curl_setopt_array($ch, array(
+					CURLOPT_POST => TRUE,
+					CURLOPT_RETURNTRANSFER => TRUE,
+					CURLOPT_POSTFIELDS => $type === 'json' ? json_encode($data, JSON_UNESCAPED_UNICODE) : $data,
+					CURLOPT_HTTPHEADER => $type === 'json' ? array(
+						'Content-Type: application/json'
+					) : array(),
+					CURLOPT_SSL_VERIFYHOST => FALSE,
+					CURLOPT_SSL_VERIFYPEER => FALSE,
+				));
+				$response = curl_exec($ch);
+
+				if(!$response){
+					exit(curl_error($ch));
+				}
+
+				curl_close($ch);
+				break;
+		}
+		if(!is_null(json_decode($response))){
+			$response = json_decode($response);
+		}
+
 		Log::info('Weixin API called: ' . $url);
-		return file_get_contents($url);
+		
+		return $response;
 	}
 	
 	/**
@@ -84,7 +114,7 @@ class Weixin {
 			'secret'=>$this->app_secret
 		);
 		
-		$return = json_decode($this->call('https://api.weixin.qq.com/cgi-bin/token?' . http_build_query($query_args)));
+		$return = $this->call('https://api.weixin.qq.com/cgi-bin/token?' . http_build_query($query_args));
 		
 		if($return->access_token)
 		{
@@ -115,7 +145,7 @@ class Weixin {
 		
 		$url .= http_build_query($query_vars);
 		
-		$user_info = json_decode($this->call($url));
+		$user_info = $this->call($url);
 		
 		return $user_info;
 		
@@ -185,7 +215,7 @@ class Weixin {
 			'code'=>$code,
 			'grant_type'=>'authorization_code'
 		);
-		$auth_result = json_decode($this->call($url . http_build_query($query_args)));
+		$auth_result = $this->call($url . http_build_query($query_args));
 		if(!isset($auth_result->openid))
 		{
 			Log::error('Get OAuth token failed. ' . json_encode($auth_result));
@@ -224,7 +254,7 @@ class Weixin {
 		
 		$url .= http_build_query($query_args);
 		
-		$auth_result = json_decode($this->call($url));
+		$auth_result = $this->call($url);
 		
 		return $auth_result;
 	}
@@ -278,7 +308,7 @@ class Weixin {
 		
 		$url .= http_build_query($query_vars);
 		
-		$user_info = json_decode($this->call($url));
+		$user_info = $this->call($url);
 		
 		return $user_info;
 	}
@@ -355,7 +385,7 @@ class Weixin {
 	public function removeMenu()
 	{
 		$url = 'https://api.weixin.qq.com/cgi-bin/menu/delete?access_token=' . $this->getAccessToken();
-		return json_decode($this->call($url));
+		return $this->call($url);
 	}
 	
 	/**
@@ -388,7 +418,7 @@ class Weixin {
 	 */
 	function getMenu()
 	{
-		$menu = json_decode($this->call('https://api.weixin.qq.com/cgi-bin/menu/get?access_token=' . $this->getAccessToken()));
+		$menu = $this->call('https://api.weixin.qq.com/cgi-bin/menu/get?access_token=' . $this->getAccessToken());
 		return $menu;
 	}
 	
@@ -402,10 +432,9 @@ class Weixin {
 		
 		$message_raw = (object) (array) simplexml_load_string(Request::getContent(), 'SimpleXMLElement', LIBXML_NOCDATA);
 		
-		if(!$message_raw)
+		if(!property_exists($message_raw, 'FromUserName'))
 		{
-			Log::error('微信消息XML解析错误: ' . Request::getContent());
-			exit;
+			return;
 		}
 		
 		if(is_null($this->user))
@@ -426,6 +455,8 @@ class Weixin {
 				));
 
 			}
+			
+			Log::info('收到微信消息：' . json_encode($message_raw));
 
 			$this->user->last_active_at = date('Y-m-d H:i:s', $message_raw->CreateTime);
 
@@ -435,6 +466,12 @@ class Weixin {
 				$this->user->longitude = $message_raw->Longitude;
 				$this->user->precision = $message_raw->Precision;
 			}
+
+//			if($message_raw->MsgType === 'location')
+//			{
+//				$this->user->latitude = $message_raw->Location_X;
+//				$this->user->longitude = $message_raw->Location_Y;
+//			}
 
 			$this->user->save();
 			
@@ -477,9 +514,16 @@ class Weixin {
 		
 		function replyMessage($content)
 		{
+			if(!$content)
+			{
+				return;
+			}
+			
 			global $message_raw, $user;
+			
 			$received_message =  $message_raw;
 			echo View::make('weixin/message-reply-text', compact('content', 'received_message'));
+			
 			Log::info('向用户' . $user->name . '发送了消息: ' . $content);
 		}
 		
@@ -504,5 +548,21 @@ class Weixin {
 		
 	}
 	
+	public function sendServiceMessage($to_user, $contents, $type = 'text')
+	{
+		if($to_user->last_active_at->timestamp < time() - 60 * 48){
+			Log::error($to_user->name . ' 已超过48小时未活动，客服消息发送失败');
+			return;
+		}
+		
+		$data = array('touser'=>$to_user->openid, 'msgtype'=>$type);
+		
+		if($type === 'text')
+		{
+			$data['text']['content'] = $contents;
+		}
+		
+		$this->call('https://api.weixin.qq.com/cgi-bin/message/custom/send?access_token=' . $this->getAccessToken(), $data, 'POST', 'json');
+	}
 	
 }
