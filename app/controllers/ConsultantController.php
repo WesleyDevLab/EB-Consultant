@@ -6,7 +6,7 @@ class ConsultantController extends BaseController {
 			
 	public function serveWeixin()
 	{
-		$wx = new Weixin();
+		$wx = new WeixinQY();
 		if(Input::get('echostr')){
 			$wx->verify();
 		}
@@ -23,16 +23,24 @@ class ConsultantController extends BaseController {
 		
 		$this->consultant = Consultant::where('open_id', Session::get('weixin.user_id'))->first();
 		
-		if(Input::method() === 'POST' && !$this->consultant)
+		if(Input::method() === 'POST')
 		{
-			$this->consultant = new Consultant();
+			if(empty($this->consultant))
+			{
+				$this->consultant = new Consultant();
+				$this->consultant->open_id = Session::get('weixin.user_id');
+			}
+			
 			$this->consultant->name = Input::get('name');
 			$this->consultant->type = Input::get('type');
-			$this->consultant->meta = json_encode(Input::get('meta'), JSON_UNESCAPED_UNICODE);
-			$this->consultant->open_id = Session::get('weixin.user_id');
+			$this->consultant->meta = Input::get('meta');
+			
 			$this->consultant->save();
 			
-			return Redirect::to('register-client');
+			if(empty($this->consultant))
+			{
+				return Redirect::to('register-client');
+			}
 		}
 		
 		return View::make('consultant/signup', array('consultant'=>$this->consultant));

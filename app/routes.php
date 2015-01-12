@@ -20,7 +20,7 @@ Route::model('product', 'Product');
 
 Route::group(array('domain' => 'consultant.ebillion.com.cn'), function()
 {
-	Route::any('wx', 'ConsultantController@serveWexin');
+	Route::any('wx', 'ConsultantController@serveWeixin');
 	Route::any('signup', 'ConsultantController@signup');
 	Route::any('register-client', 'ConsultantController@registerClient');
 	Route::any('make-report/{product?}', 'ConsultantController@makeReport');

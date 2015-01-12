@@ -14,4 +14,14 @@ class Consultant extends Eloquent {
 		return $this->hasMany('Product');
 	}
 	
+	function getMetaAttribute($value)
+	{
+		return json_decode($value);
+	}
+	
+	function setMetaAttribute($value)
+	{
+		$this->attributes['meta'] = json_encode($value, JSON_UNESCAPED_UNICODE);
+	}
+	
 }
