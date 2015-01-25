@@ -203,6 +203,10 @@
 			}
 		});
 		
+		if($('[name="type"]:checked').length === 0){
+			$('[name="type"]:first').prop('checked', true);
+		}
+		
 		$('[name="type"]:checked').trigger('change').parent('label').addClass('active');
 		
 		$('form').on('submit', function(){

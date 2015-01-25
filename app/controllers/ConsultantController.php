@@ -46,7 +46,7 @@ class ConsultantController extends BaseController {
 		return View::make('consultant/signup', array('consultant'=>$this->consultant));
 	}
 	
-	public function registerClient()
+	public function viewClient($product = null)
 	{
 		
 		$weixin = new WeixinQY();
@@ -65,35 +65,69 @@ class ConsultantController extends BaseController {
 		
 		if(Input::method() === 'POST')
 		{
-			$product = new Product();
+			
+			if(Input::get('action') === 'remove' && isset($product))
+			{
+				$clients = $product->clients();
+				
+				$product->clients()->detach();
+				$product->delete();
+				
+				foreach($clients as $client)
+				{
+					$client->delete();
+				}
+				
+				return Redirect::to('view-client');
+			}
+			
+			if(is_null($product))
+			{
+				$product = new Product();
+			}
+			
 			$product->name = Input::get('name');
 			$product->type = Input::get('type');
-			$product->meta = json_encode(Input::get('meta'), JSON_UNESCAPED_UNICODE);
+			$product->meta = Input::get('meta');
 			$product->initial_cap = $product->type === '单账户' ? Input::get('meta.起始资金规模') : Input::get('meta.劣后资金规模') * (1 + Input::get('meta.杠杆配比'));
 			$product->start_date = Input::get('start_date');
 			$product->consultant()->associate($this->consultant);
 			$product->save();
 			
-			$product->quotes()->create(array(
-				'date'=>$product->start_date,
-				'value'=>1,
-				'cap'=>$product->initial_cap
-			));
+			if(!$product->quotes)
+			{
+				$product->quotes()->create(array(
+					'date'=>$product->start_date,
+					'value'=>1,
+					'cap'=>$product->initial_cap
+				));
+			}
 			
-			$client = new Client();
-			$client->name = Input::get('name');
-			$client->open_id = md5(rand(0, 1E6));
-			$client->save();
-			$client->products()->save($product);
+			if(!$product->clients)
+			{
+				$client = new Client();
+				$client->name = Input::get('name');
+				$client->open_id = md5(rand(0, 1E6));
+				$client->save();
+				$client->products()->save($product);
+				$client->consultants()->save($this->consultant);
+				$weixin = new WeixinQY();
+				$weixin->send_message($this->consultant->open_id, '客户 ' . $client->name . ' 登记成功，请客户在微信点击以下地址绑定：' . 'http://client.ebillion.com.cn/view-report?hash=' . $client->open_id . '，并关注“翊弼私募产品统计平台”微信公众账号。');
+			}
 			
-			$weixin = new WeixinQY();
-			$client->consultants()->save($this->consultant);
-			
-			$weixin->send_message($this->consultant->open_id, '客户 ' . $client->name . ' 登记成功，请客户在微信点击以下地址绑定：' . 'http://client.ebillion.com.cn/view-report?hash=' . $client->open_id . '，并关注“翊弼私募产品统计平台”微信公众账号。');
 			return Redirect::to('make-report/' . $product->id);
 		}
 		
-		return View::make('consultant/register-client');
+		if(is_null($product) && strpos(Route::getCurrentRoute()->getPath(), 'view-client') !== false)
+		{
+			$products = $this->consultant->products;
+			return View::make('consultant/register-client', compact('products'));
+		}
+		else
+		{
+			return View::make('consultant/register-client', compact('product'));
+		}
+		
 	}
 	
 	public function makeReport(Product $product = null)

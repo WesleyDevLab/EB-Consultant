@@ -17,12 +17,14 @@ Route::get('/', function()
 });
 
 Route::model('product', 'Product');
+Route::model('client', 'Client');
 
 Route::group(array('domain' => 'consultant.ebillion.com.cn'), function()
 {
 	Route::any('wx', 'ConsultantController@serveWeixin');
 	Route::any('signup', 'ConsultantController@signup');
-	Route::any('register-client', 'ConsultantController@registerClient');
+	Route::any('view-client/{product?}', 'ConsultantController@viewClient');
+	Route::any('register-client', 'ConsultantController@viewClient');
 	Route::any('make-report/{product?}', 'ConsultantController@makeReport');
 	Route::any('view-report/{product}', 'ConsultantController@viewReport');
 });

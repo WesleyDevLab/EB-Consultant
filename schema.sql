@@ -88,7 +88,7 @@ CREATE TABLE IF NOT EXISTS `quotes` (
   KEY `updated_at` (`updated_at`),
   KEY `created_at` (`created_at`),
   KEY `date` (`date`),
-  KEY `product_id` (`product_id`)
+  UNIQUE KEY `product_id-date` (`product_id`, `date`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `client_consultant` (
@@ -128,4 +128,4 @@ ALTER TABLE `products`
   ADD CONSTRAINT `products_ibfk_1` FOREIGN KEY (`consultant_id`) REFERENCES `consultants` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE;
 
 ALTER TABLE `quotes`
-  ADD CONSTRAINT `quotes_ibfk_1` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE;
+  ADD CONSTRAINT `quotes_ibfk_1` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;

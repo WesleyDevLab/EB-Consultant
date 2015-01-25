@@ -40,12 +40,12 @@ class Product extends Eloquent {
 		return round($cost, 2);
 	}
 	
-	function getMetaAttributes($value)
+	function getMetaAttribute($value)
 	{
 		return json_decode($value);
 	}
 	
-	function setMetaAttributes($value)
+	function setMetaAttribute($value)
 	{
 		$this->attributes['meta'] = json_encode($value, JSON_UNESCAPED_UNICODE);
 	}
