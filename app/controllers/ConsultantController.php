@@ -94,7 +94,7 @@ class ConsultantController extends BaseController {
 			$product->consultant()->associate($this->consultant);
 			$product->save();
 			
-			if(!$product->quotes)
+			if(count($product->quotes) === 0)
 			{
 				$product->quotes()->create(array(
 					'date'=>$product->start_date,
@@ -103,7 +103,7 @@ class ConsultantController extends BaseController {
 				));
 			}
 			
-			if(!$product->clients)
+			if(count($product->clients) === 0)
 			{
 				$client = new Client();
 				$client->name = Input::get('name');

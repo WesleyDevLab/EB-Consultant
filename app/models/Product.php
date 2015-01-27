@@ -27,14 +27,12 @@ class Product extends Eloquent {
 	
 	function getCost()
 	{
-		$meta = json_decode($this->meta);
-		
 		$days_passed = $this->start_date->diffInDays();
 		
 		$cost = 0.00;
 		
 		if($this->type === '伞型'){
-			$cost = $this->initial_cap / ($meta->杠杆配比 + 1) * $meta->杠杆配比 * ($meta->银行托管费率 + $meta->信托通道费率 + $meta->优先资金成本) / 100 * ($days_passed + 1) / 365;
+			$cost = $this->initial_cap / ($this->meta->杠杆配比 + 1) * $this->meta->杠杆配比 * ($this->meta->银行托管费率 + $this->meta->信托通道费率 + $this->meta->优先资金成本) / 100 * ($days_passed + 1) / 365;
 		}
 		
 		return round($cost, 2);
