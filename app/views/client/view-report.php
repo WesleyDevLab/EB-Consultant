@@ -10,7 +10,7 @@
 <?php if(isset($product)){ ?>
 <ul>
 	<li>累计成本：¥<?=$product->getCost()?>（仅供参考）</li>
-	<li>浮动盈亏：<?=round(($product->quotes()->dateDescending()->first()->cap - $product->initial_cap) / $product->initial_cap * 100, 2)?>%</li>
+	<li>浮动盈亏：<?=@round(($product->quotes()->dateDescending()->first()->cap - $product->initial_cap) / $product->initial_cap * 100, 2)?>%</li>
 </ul>
 
 <table class="table table-bordered table-striped">
@@ -19,6 +19,9 @@
 			<th>日期</th>
 			<th>净值</th>
 			<th>市值</th>
+			<?php if(isset($consultant)){ ?>
+			<th>操作</th>
+			<?php } ?>
 		</tr>
 	</thead>
 	<tbody>
@@ -27,6 +30,9 @@
 			<td><?=$quote->date->toDateString()?></td>
 			<td><?=$quote->value?></td>
 			<td>¥<?=$quote->cap?></td>
+			<?php if(isset($consultant)){ ?>
+			<td><a href="<?=url()?>/make-report/<?=$product->id?>/<?=$quote->id?>" class="btn btn-xs btn-info">修改</a></td>
+			<?php } ?>
 		</tr>
 		<?php } ?>
 	</tbody>
@@ -52,7 +58,7 @@
 				<?php if(isset($product)){ ?>
 				{
 					name: '本账户',
-					data: <?=json_encode($chartData[$product->id])?>,
+					data: <?=@json_encode($chartData[$product->id])?>,
 					tooltip: {
 						valueDecimals: 2
 					}

@@ -7,7 +7,7 @@
 	<div class="form-group">
 		<label class="control-label col-sm-2">日期*</label>
 		<div class="col-sm-10">
-			<input type="date" name="date" value="<?=date('Y-m-d')?>" required class="form-control">
+			<input type="date" name="date" value="<?=$quote ? $quote->date->toDateString() : date('Y-m-d')?>" required class="form-control">
 		</div>
 	</div>
 	<div class="form-group">
@@ -15,7 +15,7 @@
 		<div class="col-sm-10">
 			<div class="input-group">
 				<div class="input-group-addon">人民币</div>
-				<input type="number" step="0.01" min="0" name="cap" required class="form-control">
+				<input type="number" step="0.01" min="0" name="cap" value="<?=@$quote->cap?>" required class="form-control">
 				<div class="input-group-addon">元</div>
 			</div>
 		</div>
@@ -23,12 +23,16 @@
 	<div class="form-group">
 		<label class="control-label col-sm-2">备注</label>
 		<div class="col-sm-10">
-			<textarea name="comments" class="form-control"></textarea>
+			<textarea name="comments" value="<?=@$quote->comments?>" class="form-control"></textarea>
 		</div>
 	</div>
 	<button type="submit" class="btn btn-primary btn-lg">提交</button>
 	<button type="submit" name="continue" value="1" class="btn btn-default btn-lg">提交并继续</button>
-	<a href="<?=url()?>/view-report/<?=$product->id?>" class="btn btn-info btn-lg">查看</a>
+	<hr>
+	<?php if(isset($quote)){ ?>
+	<button type="submit" name="remove" value="1" class="btn btn-danger btn-lg">删除此报价</button>
+	<?php } ?>
+	<a href="<?=url()?>/view-report/<?=$product->id?>" class="btn btn-info btn-lg">查看历史报价</a>
 </form>
 <?php } else{ ?>
 <ul class="nav nav-pills nav-stacked">

@@ -130,7 +130,7 @@ class ConsultantController extends BaseController {
 		
 	}
 	
-	public function makeReport(Product $product = null)
+	public function makeReport(Product $product = null, Quote $quote = null)
 	{
 		$weixin = new WeixinQY();
 		
@@ -153,27 +153,50 @@ class ConsultantController extends BaseController {
 		
 		if(Input::method() === 'POST')
 		{
-			$quote = new Quote();
+			if(Input::get('remove'))
+			{
+				$quote->delete();
+				return Redirect::to('make-report/' . $product->id);
+			}
+			
+			is_null($quote) && $quote = new Quote();
+			
 			$quote->fill(Input::all());
 			$quote->cap = Input::get('cap');
 			$quote->value = Input::get('cap') / $product->initial_cap;
 			$quote->product()->associate($product);
 			$quote->save();
 			
-			if(!Input::get('continue')){
+			if(!Input::get('continue'))
+			{
 				return Redirect::to('make-report');
+			}
+			else
+			{
+				return Redirect::to('make-report/' . $product->id);
 			}
 			
 		}
 		
-		return View::make('consultant/make-report', compact('products', 'product'));
+		return View::make('consultant/make-report', compact('products', 'product', 'quote'));
 	}
 	
 	public function viewReport($product)
 	{
+		if(Route::current()->getName() === 'consultant-view-report')
+		{
+			$weixin = new WeixinQY();
+			
+			if(!Session::get('weixin.user_id'))
+			{
+				$weixin_user_info = $weixin->oauth_get_user_info();
+				Session::set('weixin.user_id', $weixin_user_info->UserId);
+			}
+			
+			$this->consultant = Consultant::where('open_id', Session::get('weixin.user_id'))->first();
+		}
 		
 		$chartData = array();
-		
 		foreach($product->quotes()->dateAscending()->get() as $quote){
 			$chartData[$product->id][] = array(strtotime($quote->date) * 1000, round($quote->value, 2));
 		}
@@ -185,7 +208,7 @@ class ConsultantController extends BaseController {
 			$chartData['sh300'][] = array(strtotime($quote->date) * 1000, round($quote->value, 2));
 		}
 		
-		return View::make('client/view-report', compact('product', 'chartData'));
+		return View::make('client/view-report', compact('product', 'chartData', 'consultant'));
 	}
 	
 }

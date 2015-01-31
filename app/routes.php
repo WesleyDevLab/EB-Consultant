@@ -17,6 +17,7 @@ Route::get('/', function()
 });
 
 Route::model('product', 'Product');
+Route::model('quote', 'Quote');
 Route::model('client', 'Client');
 
 Route::group(array('domain' => 'consultant.ebillion.com.cn'), function()
@@ -25,8 +26,8 @@ Route::group(array('domain' => 'consultant.ebillion.com.cn'), function()
 	Route::any('signup', 'ConsultantController@signup');
 	Route::any('view-client/{product?}', 'ConsultantController@viewClient');
 	Route::any('register-client', 'ConsultantController@viewClient');
-	Route::any('make-report/{product?}', 'ConsultantController@makeReport');
-	Route::any('view-report/{product}', 'ConsultantController@viewReport');
+	Route::any('make-report/{product?}/{quote?}', 'ConsultantController@makeReport');
+	Route::any('view-report/{product}', array('as'=>'consultant-view-report', 'uses'=>'ConsultantController@viewReport'));
 });
 
 Route::group(array('domain' => 'client.ebillion.com.cn'), function()
