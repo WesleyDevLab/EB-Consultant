@@ -183,18 +183,15 @@ class ConsultantController extends BaseController {
 	
 	public function viewReport($product)
 	{
-		if(Route::current()->getName() === 'consultant-view-report')
+		$weixin = new WeixinQY();
+
+		if(!Session::get('weixin.user_id'))
 		{
-			$weixin = new WeixinQY();
-			
-			if(!Session::get('weixin.user_id'))
-			{
-				$weixin_user_info = $weixin->oauth_get_user_info();
-				Session::set('weixin.user_id', $weixin_user_info->UserId);
-			}
-			
-			$this->consultant = Consultant::where('open_id', Session::get('weixin.user_id'))->first();
+			$weixin_user_info = $weixin->oauth_get_user_info();
+			Session::set('weixin.user_id', $weixin_user_info->UserId);
 		}
+
+		$consultant = $this->consultant = Consultant::where('open_id', Session::get('weixin.user_id'))->first();
 		
 		$chartData = array();
 		foreach($product->quotes()->dateAscending()->get() as $quote){
