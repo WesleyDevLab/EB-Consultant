@@ -46,6 +46,47 @@ class ConsultantController extends BaseController {
 		return View::make('consultant/signup', array('consultant'=>$this->consultant));
 	}
 	
+	public function viewConsultant($consultant = null)
+	{
+		$weixin = new WeixinQY();
+		if(!Session::get('weixin.user_id'))
+		{
+			$weixin_user_info = $weixin->oauth_get_user_info();
+			Session::set('weixin.user_id', $weixin_user_info->UserId);
+		}
+		
+		$this->consultant = Consultant::where('open_id', Session::get('weixin.user_id'))->first();
+		
+		$administrators = json_decode(ConfigModel::where('key', 'administrators')->first()->value);
+		
+		if(!$this->consultant || !in_array($this->consultant->open_id, $administrators))
+		{
+			return;
+		}
+		
+		if(is_null($consultant))
+		{
+			$consultants = Consultant::all();
+			return View::make('consultant/list', compact('consultants'));
+		}
+		
+		else
+		{
+			if(Input::method() === 'POST')
+			{
+				$consultant->name = Input::get('name');
+				$consultant->type = Input::get('type');
+				$consultant->meta = Input::get('meta');
+
+				$consultant->save();
+
+				return Redirect::to('view-consultant');
+			}
+			
+			return View::make('consultant/signup', compact('consultant'));
+		}
+	}
+	
 	public function viewClient($product = null)
 	{
 		

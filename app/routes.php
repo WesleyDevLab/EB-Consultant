@@ -19,11 +19,13 @@ Route::get('/', function()
 Route::model('product', 'Product');
 Route::model('quote', 'Quote');
 Route::model('client', 'Client');
+Route::model('consultant', 'Consultant');
 
 Route::group(array('domain' => 'consultant.ebillion.com.cn'), function()
 {
 	Route::any('wx', 'ConsultantController@serveWeixin');
 	Route::any('signup', 'ConsultantController@signup');
+	Route::any('view-consultant/{consultant?}', 'ConsultantController@viewConsultant');
 	Route::any('view-client/{product?}', 'ConsultantController@viewClient');
 	Route::any('register-client', 'ConsultantController@viewClient');
 	Route::any('make-report/{product?}/{quote?}', 'ConsultantController@makeReport');
