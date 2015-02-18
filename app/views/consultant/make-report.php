@@ -37,7 +37,7 @@
 <?php } else{ ?>
 <ul class="nav nav-pills nav-stacked">
 	<?php foreach($products as $product){ ?>
-	<li role="presentation"><a href="<?=url('make-report/' . $product->id)?>"><?=$product->name?>, <?=$product->type?></li>
+	<li role="presentation"><a href="<?=url('make-report/' . $product->id)?>"><?=$product->name?>, <?=$product->type?></a></li>
 	<?php } ?>
 	<?php if(count($products) === 0){ ?>
 	<div class="alert alert-warning">请先添加客户产品</div>

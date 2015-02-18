@@ -14,11 +14,11 @@
 		<label class="control-label col-sm-2">类型*</label>
 		<div class="col-sm-offset-2 col-sm-10">
 			<div class="btn-group btn-block" data-toggle="buttons">
-				<label class="btn btn-default col-xs-6<?php if($product->type === '单账户'){ ?> active<?php } ?>">
+				<label class="btn btn-default col-xs-6<?php if(@$product->type === '单账户'){ ?> active<?php } ?>">
 					<?=Form::radio('type', '单账户', @$product->type === '单账户', array('required'))?>
 					单账户
 				</label>
-				<label class="btn btn-default col-xs-6<?php if($product->type === '伞型'){ ?> active<?php } ?>">
+				<label class="btn btn-default col-xs-6<?php if(@$product->type === '伞型'){ ?> active<?php } ?>">
 					<?=Form::radio('type', '伞型', @$product->type === '伞型', array('required'))?>
 					伞型
 				</label>
@@ -40,7 +40,7 @@
 			<input type="date" name="start_date" value="<?=$product ? $product->start_date->toDateString() : ''?>" required class="form-control">
 		</div>
 	</div>
-	<fieldset id="single"<?php if($product->type !== '单账户'){ ?> style="display:none"<?php } ?>>
+	<fieldset id="single"<?php if(@$product->type !== '单账户'){ ?> style="display:none"<?php } ?>>
 		<div class="form-group">
 			<label class="control-label col-sm-2">起始资金规模*</label>
 			<div class="col-sm-10">
@@ -58,7 +58,7 @@
 			</div>
 		</div>
 	</fieldset>
-	<fieldset id="umbrella-account"<?php if($product->type !== '伞型'){ ?> style="display:none"<?php } ?>>
+	<fieldset id="umbrella-account"<?php if(@$product->type !== '伞型'){ ?> style="display:none"<?php } ?>>
 		<div class="form-group">
 			<label class="control-label col-sm-2">劣后资金规模*</label>
 			<div class="col-sm-10">

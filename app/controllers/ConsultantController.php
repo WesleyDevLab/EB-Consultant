@@ -117,7 +117,6 @@ class ConsultantController extends BaseController {
 		
 		$administrators = json_decode(ConfigModel::where('key', 'administrators')->first()->value);
 		
-		// view-client?consultant_id={consultant_id}, view-client/{product_id}?
 		if(Input::query('consultant_id') && in_array($this->consultant->open_id, $administrators))
 		{
 			$consultant = Consultant::find(Input::query('consultant_id'));
@@ -144,6 +143,7 @@ class ConsultantController extends BaseController {
 				
 				foreach($clients as $client)
 				{
+					$client->consultants()->detach();
 					$client->delete();
 				}
 				
