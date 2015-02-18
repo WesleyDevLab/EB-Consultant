@@ -256,6 +256,8 @@ class WeixinQY {
 		
 		$user_info = $this->call($url);
 		
+		Log::info(json_encode($user_info, JSON_UNESCAPED_UNICODE));
+		
 		return $user_info;
 	}
 	

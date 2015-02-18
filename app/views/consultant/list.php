@@ -5,10 +5,20 @@
 </div>
 <!--<a href="<?=url('signup')?>" class="btn btn-primary btn-block">登记新投顾</a>
 <hr>-->
-<ul class="nav nav-pills nav-stacked">
+<table class="table table-striped">
 	<?php foreach($consultants as $consultant){ ?>
-	<li role="presentation"><a href="<?=url('view-consultant/' . $consultant->id)?>"><?=$consultant->name?>, <?=$consultant->type?></li>
+	<tr role="presentation">
+		<td>
+			<h4><?=$consultant->name?> <span class="small"><?=$consultant->type?></span></h4>
+		</td>
+		<td>
+			<a href="<?=url('view-consultant/' . $consultant->id)?>" class="btn btn-default"><span class="glyphicon glyphicon-edit"></span> 资料</a>
+		</td>
+		<td>
+			<a href="<?=url()?>/view-client?consultant_id=<?=$consultant->id?>" class="btn btn-default"><span class="glyphicon glyphicon-usd"></span> 产品</a>
+		</td>
+	</tr>
 	<?php } ?>
-</ul>
+</table>
 
 <?php echo View::make('footer'); ?>

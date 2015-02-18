@@ -12,6 +12,9 @@ class ConsultantController extends BaseController {
 		}
 	}
 	
+	/**
+	 * 投顾注册，资料修改
+	 */
 	public function signup()
 	{
 		$weixin = new WeixinQY();
@@ -46,6 +49,9 @@ class ConsultantController extends BaseController {
 		return View::make('consultant/signup', array('consultant'=>$this->consultant));
 	}
 	
+	/**
+	 * 管理员查看，编辑投顾信息
+	 */
 	public function viewConsultant($consultant = null)
 	{
 		$weixin = new WeixinQY();
@@ -61,7 +67,7 @@ class ConsultantController extends BaseController {
 		
 		if(!$this->consultant || !in_array($this->consultant->open_id, $administrators))
 		{
-			return;
+			return '只有管理员才能查看所有投顾信息。';
 		}
 		
 		if(is_null($consultant))
@@ -87,6 +93,11 @@ class ConsultantController extends BaseController {
 		}
 	}
 	
+	/**
+	 * 客户添加，修改，列表
+	 * 用户可能是客户的投顾，也可能是管理员
+	 * 目前管理员在系统中首先是投顾
+	 */
 	public function viewClient($product = null)
 	{
 		
@@ -106,9 +117,15 @@ class ConsultantController extends BaseController {
 		
 		$administrators = json_decode(ConfigModel::where('key', 'administrators')->first()->value);
 		
+		// view-client?consultant_id={consultant_id}, view-client/{product_id}?
 		if(Input::query('consultant_id') && in_array($this->consultant->open_id, $administrators))
 		{
 			$consultant = Consultant::find(Input::query('consultant_id'));
+			$consultant->is_administrated = true;
+		}
+		elseif($product)
+		{
+			$consultant = $product->consultant;
 		}
 		else
 		{
@@ -173,15 +190,18 @@ class ConsultantController extends BaseController {
 		if(is_null($product) && strpos(Route::getCurrentRoute()->getPath(), 'view-client') !== false)
 		{
 			$products = $consultant->products;
-			return View::make('consultant/register-client', compact('products', 'consultant'));
+			return View::make('client/list', compact('products', 'consultant'));
 		}
 		else
 		{
-			return View::make('consultant/register-client', compact('product'));
+			return View::make('client/register', compact('product'));
 		}
 		
 	}
 	
+	/**
+	 * 为一产品添加，修改一条净值报告
+	 */
 	public function makeReport(Product $product = null, Quote $quote = null)
 	{
 		$weixin = new WeixinQY();
@@ -233,6 +253,9 @@ class ConsultantController extends BaseController {
 		return View::make('consultant/make-report', compact('products', 'product', 'quote'));
 	}
 	
+	/**
+	 * 查看产品的净值报告图表
+	 */
 	public function viewReport($product)
 	{
 		$weixin = new WeixinQY();

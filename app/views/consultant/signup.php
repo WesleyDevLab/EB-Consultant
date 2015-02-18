@@ -7,18 +7,18 @@
 	<div class="form-group">
 		<div class="col-sm-offset-2 col-sm-10">
 			<div class="btn-group btn-block" data-toggle="buttons">
-				<label class="btn btn-default col-xs-6">
+				<label class="btn btn-default col-xs-6<?php if($consultant->type === '机构'){ ?> active<?php } ?>">
 					<?=Form::radio('type', '机构', @$consultant->type === '机构', array('required'))?>
 					机构
 				</label>
-				<label class="btn btn-default col-xs-6">
+				<label class="btn btn-default col-xs-6<?php if($consultant->type === '个人'){ ?> active<?php } ?>">
 					<?=Form::radio('type', '个人', @$consultant->type === '个人', array('required'))?>
 					个人
 				</label>
 			</div>
 		</div>
 	</div>
-	<fieldset id="entity">
+	<fieldset id="entity"<?php if($consultant->type !== '机构'){ ?> style="display:none"<?php } ?>>
 		<div class="form-group">
 			<label class="control-label col-sm-2">公司全称*</label>
 			<div class="col-sm-10">
@@ -104,7 +104,7 @@
 			</div>
 		</div>
 	</fieldset>
-	<fieldset id="personal">
+	<fieldset id="personal"<?php if($consultant->type !== '个人'){ ?> style="display:none"<?php } ?>>
 		<div class="form-group">
 			<label class="control-label col-sm-2">投顾名字*</label>
 			<div class="col-sm-10">

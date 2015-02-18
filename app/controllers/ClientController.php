@@ -30,6 +30,9 @@ class ClientController extends BaseController {
 		return json_encode($result) . "\n" . json_encode($weixin->getMenu(), JSON_UNESCAPED_UNICODE);
 	}
 	
+	/**
+	 * 查看产品的净值报告图表
+	 */
 	public function viewReport()
 	{
 		
