@@ -1,13 +1,13 @@
 <?php echo View::make('header'); ?>
 <?php if(isset($products)){ ?>
 <div class="page-header">
-	<h2 class="text-center">私募客户产品</h2>
+	<h2 class="text-center">私募<?php if(isset($consultant)){ ?><?=$consultant->name?>的<?php } ?>客户产品</h2>
 </div>
 <a href="<?=url('register-client')?>" class="btn btn-primary btn-block">登记新客户产品</a>
 <hr>
 <ul class="nav nav-pills nav-stacked">
 	<?php foreach($products as $product){ ?>
-	<li role="presentation"><a href="<?=url('view-client/' . $product->id)?>"><?=$product->name?>, <?=$product->type?></li>
+	<li role="presentation"><a href="<?=url('view-client/' . $product->id)?>"><?=$product->name?>, <?=$product->type?></a></li>
 	<?php } ?>
 </ul>
 <?php }else{ ?>
@@ -158,6 +158,7 @@
 	<?php }else{ ?>
 	<button type="submit" class="btn btn-primary btn-lg">更新</button>
 	<button type="submit" name="action" value="remove" class="btn btn-danger btn-lg">删除</button>
+	<a href="<?=url()?>/view-report/<?=$product->id?>" class="btn btn-info btn-lg">查看报告</a>
 	<?php } ?>
 </form>
 <?php } ?>

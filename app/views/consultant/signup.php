@@ -179,6 +179,7 @@
 			<textarea name="meta[投资风格和策略]" required class="form-control"><?=@$consultant->meta->投资风格和策略?></textarea>
 		</div>
 	</div>
+	<?php if(Route::getCurrentRoute()->getPath() === 'signup'){ ?>
 	<div class="form-group">
 		<div class="col-sm-offset-2 col-sm-10">
 			<label class="checkbox-inline">
@@ -187,6 +188,10 @@
 			</label>
 		</div>
 	</div>
+	<?php }elseif($consultant){ ?>
+	<a href="<?=url()?>/view-client?consultant_id=<?=$consultant->id?>" class="btn btn-info btn-block btn-lg">查看客户产品</a>
+	<?php } ?>
+	<hr>
 	<button type="submit" class="btn btn-primary btn-block btn-lg"><?=empty($consultant) ? '注册' : '更新'?></button>
 </form>
 
@@ -210,7 +215,7 @@
 		$('[name="type"]:checked').trigger('change').parent('label').addClass('active');
 		
 		$('form').on('submit', function(){
-			if(!$('#agreement').is(':checked')){
+			if($('#agreement').length && !$('#agreement').is(':checked')){
 				return false;
 			}
 		});

@@ -104,6 +104,17 @@ class ConsultantController extends BaseController {
 			return Redirect::to('signup');
 		}
 		
+		$administrators = json_decode(ConfigModel::where('key', 'administrators')->first()->value);
+		
+		if(Input::query('consultant_id') && in_array($this->consultant->open_id, $administrators))
+		{
+			$consultant = Consultant::find(Input::query('consultant_id'));
+		}
+		else
+		{
+			$consultant = $this->consultant;
+		}
+		
 		if(Input::method() === 'POST')
 		{
 			
@@ -132,7 +143,7 @@ class ConsultantController extends BaseController {
 			$product->meta = Input::get('meta');
 			$product->initial_cap = $product->type === '单账户' ? Input::get('meta.起始资金规模') : Input::get('meta.劣后资金规模') * (1 + Input::get('meta.杠杆配比'));
 			$product->start_date = Input::get('start_date');
-			$product->consultant()->associate($this->consultant);
+			$product->consultant()->associate($consultant);
 			$product->save();
 			
 			if(count($product->quotes) === 0)
@@ -148,12 +159,12 @@ class ConsultantController extends BaseController {
 			{
 				$client = new Client();
 				$client->name = Input::get('name');
-				$client->open_id = md5(rand(0, 1E6));
+				$client->open_id =  'rand-' . md5(rand(0, 1E6));
 				$client->save();
 				$client->products()->save($product);
-				$client->consultants()->save($this->consultant);
+				$client->consultants()->save($consultant);
 				$weixin = new WeixinQY();
-				$weixin->send_message($this->consultant->open_id, '客户 ' . $client->name . ' 登记成功，请客户在微信点击以下地址绑定：' . 'http://client.ebillion.com.cn/view-report?hash=' . $client->open_id . '，并关注“翊弼私募产品统计平台”微信公众账号。');
+				$weixin->send_message($consultant->open_id, '客户 ' . $client->name . ' 登记成功，请客户在微信点击以下地址绑定：' . 'http://client.ebillion.com.cn/view-report?hash=' . $client->open_id . '，并关注“翊弼私募产品统计平台”微信公众账号。');
 			}
 			
 			return Redirect::to('make-report/' . $product->id);
@@ -161,8 +172,8 @@ class ConsultantController extends BaseController {
 		
 		if(is_null($product) && strpos(Route::getCurrentRoute()->getPath(), 'view-client') !== false)
 		{
-			$products = $this->consultant->products;
-			return View::make('consultant/register-client', compact('products'));
+			$products = $consultant->products;
+			return View::make('consultant/register-client', compact('products', 'consultant'));
 		}
 		else
 		{
@@ -229,6 +240,11 @@ class ConsultantController extends BaseController {
 		if(!Session::get('weixin.user_id'))
 		{
 			$weixin_user_info = $weixin->oauth_get_user_info();
+			if(!$weixin_user_info->UserId)
+			{
+				Log::error('Weixin OAuth failed. ' . json_encode($weixin_user_info));
+				throw new Exception();
+			}
 			Session::set('weixin.user_id', $weixin_user_info->UserId);
 		}
 
