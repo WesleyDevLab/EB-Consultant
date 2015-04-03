@@ -2,7 +2,7 @@
 /**
  * Weixin library for Laravel
  * @author Uice Lu <uicestone@gmail.com>
- * @version 0.61 (2014/1/9)
+ * @version 0.62 (2015/4/3)
  */
 class Weixin {
 	
@@ -59,11 +59,21 @@ class Weixin {
 		if(!is_null($data) && $method === 'GET'){
 			$method = 'POST';
 		}
-		switch(strtoupper($method)){
+		switch(strtoupper($method))
+		{
 			case 'GET':
-				$response = file_get_contents($url);
+				
+				$ch = curl_init($url);
+				curl_setopt_array($ch, array(
+					CURLOPT_RETURNTRANSFER => TRUE,
+					CURLOPT_SSL_VERIFYHOST => FALSE,
+					CURLOPT_SSL_VERIFYPEER => FALSE,
+				));
+				$response = curl_exec($ch);
 				break;
+			
 			case 'POST':
+				
 				$ch = curl_init($url);
 				curl_setopt_array($ch, array(
 					CURLOPT_POST => TRUE,
@@ -75,6 +85,7 @@ class Weixin {
 					CURLOPT_SSL_VERIFYHOST => FALSE,
 					CURLOPT_SSL_VERIFYPEER => FALSE,
 				));
+				
 				$response = curl_exec($ch);
 
 				if(!$response){
