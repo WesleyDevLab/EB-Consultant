@@ -53,13 +53,23 @@ class WeixinQY {
 	
 	function call($url, $data = null, $method = 'GET'){
 		
+		Log::debug('Calling API: ' . $url);
+		
 		if(!is_null($data) && $method === 'GET'){
 			$method = 'POST';
 		}
 		
+		Log::debug('Method: ' . $method);
+		
 		switch(strtoupper($method)){
 			case 'GET':
-				$response = file_get_contents($url);
+				$ch = curl_init($url);
+
+				curl_setopt_array($ch, array(
+					CURLOPT_RETURNTRANSFER => TRUE
+				));
+
+				$response = curl_exec($ch);
 				break;
 			
 			case 'POST':
@@ -77,6 +87,8 @@ class WeixinQY {
 				$response = curl_exec($ch);
 				break;
 		}
+		
+		Log::debug('Response: ' . $response);
 		
 		if(!is_null(json_decode($response))){
 			$response = json_decode($response);
@@ -238,6 +250,7 @@ class WeixinQY {
 		
 		if(is_null($code) && Request::get('code')){
 			$code = Request::get('code');
+			Log::debug('Code found in URL: ' . $code);
 		}
 		
 		if(is_null($code)){
