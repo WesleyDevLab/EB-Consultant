@@ -1,45 +1,53 @@
 <?php echo View::make('header'); ?>
 <div class="page-header">
-	<h2 class="text-center">净值报告</h2>
+	<h2 class="text-center">净值报告 <small><?=isset($product) ? $product->name : ''?></small></h2>
 </div>
 <?php if(!isset($product)){ ?>
 <div class="alert alert-warning">
 	你还没有登记成为客户。请使用私募投顾发送给您的链接进入一次系统，之后您可以从平台“净值查询”按钮查询。
 </div>
 <?php } ?>
-<?php if(isset($product)){ ?>
-<ul>
-	<li>累计成本：¥<?=$product->getCost()?>（仅供参考）</li>
-	<li>浮动盈亏：<?=@round(($product->quotes()->dateDescending()->first()->cap - $product->initial_cap) / $product->initial_cap * 100, 2)?>%</li>
-</ul>
 
-<table class="table table-bordered table-striped">
-	<thead>
-		<tr>
-			<th>日期</th>
-			<th>净值</th>
-			<th>市值</th>
-			<?php if(isset($consultant)){ ?>
-			<th>操作</th>
-			<?php } ?>
-		</tr>
-	</thead>
-	<tbody>
-		<?php foreach($product->quotes()->dateDescending()->get() as $quote){ ?>
-		<tr>
-			<td><?=$quote->date->toDateString()?></td>
-			<td><?=$quote->value?></td>
-			<td>¥<?=$quote->cap?></td>
-			<?php if(isset($consultant)){ ?>
-			<td><a href="<?=url()?>/make-report/<?=$product->id?>/<?=$quote->id?>" class="btn btn-xs btn-info">修改</a></td>
-			<?php } ?>
-		</tr>
+<div class="row">
+	<div class="col-sm-4 col-xs-12">
+		<?php if(isset($product)){ ?>
+		<?php if(!$is_guest){ ?>
+		<ul>
+			<li>累计成本：¥<?=$product->getCost()?>（仅供参考）</li>
+			<li>浮动盈亏：<?=@round(($product->quotes()->dateDescending()->first()->cap - $product->initial_cap) / $product->initial_cap * 100, 2)?>%</li>
+		</ul>
 		<?php } ?>
-	</tbody>
-</table>
-<?php } ?>
 
-<div id="chart"></div>
+		<table class="table table-bordered table-striped">
+			<thead>
+				<tr>
+					<th>日期</th>
+					<th>净值</th>
+					<?php if(!$is_guest){ ?><th>市值</th><?php } ?>
+					<?php if(isset($consultant)){ ?>
+					<th>操作</th>
+					<?php } ?>
+				</tr>
+			</thead>
+			<tbody>
+				<?php foreach($product->quotes()->dateDescending()->get() as $quote){ ?>
+				<tr>
+					<td><?=$quote->date->toDateString()?></td>
+					<td><?=$quote->value?></td>
+					<?php if(!$is_guest){ ?><td>¥<?=$quote->cap?></td><?php } ?>
+					<?php if(isset($consultant)){ ?>
+					<td><a href="<?=url()?>/make-report/<?=$product->id?>/<?=$quote->id?>" class="btn btn-xs btn-info">修改</a></td>
+					<?php } ?>
+				</tr>
+				<?php } ?>
+			</tbody>
+		</table>
+		<?php } ?>
+	</div>
+	<div class="col-sm-8 col-xs-12">
+		<div id="chart"></div>
+	</div>
+</div>
 <script type="text/javascript" src="<?=url()?>/packages/highstock-release/highstock.js"></script>
 <script type="text/javascript">
 	jQuery(function($){

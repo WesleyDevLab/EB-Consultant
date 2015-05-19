@@ -40,3 +40,11 @@ Route::group(array('domain' => 'client.ebillion.com.cn'), function()
 	Route::any('update-menu', 'ClientController@updateMenu');
 });
 
+Route::group(array('domain' => 'news.ebillion.com.cn'), function()
+{
+	Route::any('wx', 'NewsController@serveWeixin');
+	Route::get('consultant', 'NewsController@viewConsultant');
+	Route::get('product', 'NewsController@viewProduct');
+	Route::get('report/{product}', 'NewsController@viewReport');
+});
+
