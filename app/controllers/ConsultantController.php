@@ -4,6 +4,9 @@ class ConsultantController extends BaseController {
 	
 	protected $consultant;
 			
+	/**
+	 * 处理微信消息，验证
+	 */
 	public function serveWeixin()
 	{
 		$wx = new WeixinQY();
@@ -18,20 +21,25 @@ class ConsultantController extends BaseController {
 	public function signup()
 	{
 		$weixin = new WeixinQY();
+		
 		if(!Session::get('weixin.user_id'))
 		{
 			$weixin_user_info = $weixin->oauth_get_user_info();
 			Session::set('weixin.user_id', $weixin_user_info->UserId);
 		}
 		
-		$this->consultant = Consultant::where('open_id', Session::get('weixin.user_id'))->first();
+		$user = User::where('open_id', Session::get('weixin.user_id'))->first();
+		$user && $this->consultant = $user->loggable;
 		
 		if(Input::method() === 'POST')
 		{
+			
+			$is_new = false;
+			
 			if(empty($this->consultant))
 			{
+				$is_new = true;
 				$this->consultant = new Consultant();
-				$this->consultant->open_id = Session::get('weixin.user_id');
 			}
 			
 			$this->consultant->name = Input::get('name');
@@ -40,8 +48,16 @@ class ConsultantController extends BaseController {
 			
 			$this->consultant->save();
 			
-			if(empty($this->consultant))
+			if($is_new)
 			{
+				$user = new User();
+				$user->fill(array(
+					'name'=>Input::get('name'),
+					'open_id'=>Session::get('weixin.user_id')
+				));
+				$user->loggable()->associate($this->consultant);
+				$user->save();
+				
 				return Redirect::to('register-client');
 			}
 		}
@@ -61,11 +77,11 @@ class ConsultantController extends BaseController {
 			Session::set('weixin.user_id', $weixin_user_info->UserId);
 		}
 		
-		$this->consultant = Consultant::where('open_id', Session::get('weixin.user_id'))->first();
+		$user = User::where('open_id', Session::get('weixin.user_id'))->first();
 		
 		$administrators = json_decode(ConfigModel::where('key', 'administrators')->first()->value);
 		
-		if(!$this->consultant || !in_array($this->consultant->open_id, $administrators))
+		if(!in_array($user->open_id, $administrators))
 		{
 			return '只有管理员才能查看所有投顾信息。';
 		}
@@ -109,7 +125,8 @@ class ConsultantController extends BaseController {
 			Session::set('weixin.user_id', $weixin_user_info->UserId);
 		}
 		
-		$this->consultant = Consultant::where('open_id', Session::get('weixin.user_id'))->first();
+		$user = User::where('open_id', Session::get('weixin.user_id'))->first();
+		$user && $this->consultant = $user->loggable;
 		
 		if(!$this->consultant){
 			return Redirect::to('signup');
@@ -117,7 +134,7 @@ class ConsultantController extends BaseController {
 		
 		$administrators = json_decode(ConfigModel::where('key', 'administrators')->first()->value);
 		
-		if(Input::query('consultant_id') && in_array($this->consultant->open_id, $administrators))
+		if(Input::query('consultant_id') && in_array($user->open_id, $administrators))
 		{
 			$consultant = Consultant::find(Input::query('consultant_id'));
 			$consultant->is_administrated = true;
@@ -176,15 +193,25 @@ class ConsultantController extends BaseController {
 			{
 				$client = new Client();
 				$client->name = Input::get('name');
-				$client->open_id =  'rand-' . md5(rand(0, 1E6));
 				$client->save();
 				$client->products()->save($product);
 				$client->consultants()->save($consultant);
+				
+				$client_user = new User();
+				
+				$client_user->fill(array(
+					'name'=>Input::get('name'),
+					'open_id'=>'rand-' . md5(rand(0, 1E6))
+				));
+				
+				$client_user->loggable()->associate($client);
+				$client_user->save();
+				
 				$weixin = new WeixinQY();
-				$weixin->send_message($consultant->open_id, '客户 ' . $client->name . ' 登记成功，请客户在微信点击以下地址绑定：' . 'http://client.ebillion.com.cn/view-report?hash=' . $client->open_id . '，并关注“翊弼私募产品统计平台”微信公众账号。');
+				$weixin->send_message($user->open_id, '客户 ' . $client->name . ' 登记成功，请客户在微信点击以下地址绑定：' . 'http://client.ebillion.com.cn/view-report?hash=' . $client_user->open_id . '，并关注“翊弼私募产品统计平台”微信公众账号。');
 			}
 			
-			return Redirect::to('make-report/' . $product->id);
+//			return Redirect::to('make-report/' . $product->id);
 		}
 		
 		if(is_null($product) && strpos(Route::getCurrentRoute()->getPath(), 'view-client') !== false)
@@ -212,7 +239,8 @@ class ConsultantController extends BaseController {
 			Session::set('weixin.user_id', $weixin_user_info->UserId);
 		}
 		
-		$this->consultant = Consultant::where('open_id', Session::get('weixin.user_id'))->first();
+		$user = User::where('open_id', Session::get('weixin.user_id'))->first();
+		$user && $this->consultant = $user->loggable;
 		
 		if(!$this->consultant){
 			return Redirect::to('signup');
@@ -259,8 +287,17 @@ class ConsultantController extends BaseController {
 	public function viewReport($product)
 	{
 		$weixin = new WeixinQY();
-
-		if(!Session::get('weixin.user_id'))
+		
+		$is_guest = false;
+		
+		$user_agent = Input::server('HTTP_USER_AGENT');
+		
+		if(strpos($user_agent, 'MicroMessenger') === false)
+		{
+			$is_guest = true;
+		}
+		
+		if(!$is_guest && !Session::get('weixin.user_id'))
 		{
 			$weixin_user_info = $weixin->oauth_get_user_info();
 			if(!$weixin_user_info->UserId)
@@ -271,7 +308,8 @@ class ConsultantController extends BaseController {
 			Session::set('weixin.user_id', $weixin_user_info->UserId);
 		}
 
-		$consultant = $this->consultant = Consultant::where('open_id', Session::get('weixin.user_id'))->first();
+		$user = User::where('open_id', Session::get('weixin.user_id'))->first();
+		$user && $this->consultant = $user->loggable;
 		
 		$chartData = array();
 		foreach($product->quotes()->dateAscending()->get() as $quote){
@@ -285,7 +323,7 @@ class ConsultantController extends BaseController {
 			$chartData['sh300'][] = array(strtotime($quote->date) * 1000, round($quote->value, 2));
 		}
 		
-		return View::make('client/view-report', compact('product', 'chartData', 'consultant'));
+		return View::make('client/view-report', compact('product', 'chartData', 'consultant', 'is_guest'));
 	}
 	
 }

@@ -2,11 +2,11 @@
 /**
  * Weixin library for Laravel
  * @author Uice Lu <uicestone@gmail.com>
- * @version 0.62 (2015/4/3)
+ * @version 0.63 (2015/5/19)
  */
 class Weixin {
 	
-	private $account;
+	public $account;
 	
 	private $token; // 微信公众账号后台 / 高级功能 / 开发模式 / 服务器配置
 	private $app_id; // 开发模式 / 开发者凭据
@@ -236,11 +236,10 @@ class Weixin {
 		$auth_result->expires_at = $auth_result->expires_in + time();
 		
 		// 客户未关注，但已经储存在数据表中，将其open_id更新进来
-		// TODO: CHANGE THIS to a common user create and identify function
-		if(Input::get('hash') && $client = Client::where('open_id', Input::get('hash'))->first())
+		if(Input::get('hash') && $user = User::where('open_id', Input::get('hash'))->first())
 		{
-			$client->open_id = $auth_result->openid;
-			$client->save();
+			$user->open_id = $auth_result->openid;
+			$user->save();
 		}
 		
 		Session::set('weixin.open_id', $auth_result->openid);

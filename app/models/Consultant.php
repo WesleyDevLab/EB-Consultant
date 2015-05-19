@@ -14,6 +14,11 @@ class Consultant extends Eloquent {
 		return $this->hasMany('Product');
 	}
 	
+	function user()
+	{
+		return $this->morphOne('User', 'loggable');
+	}
+	
 	function getMetaAttribute($value)
 	{
 		return json_decode($value);

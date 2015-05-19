@@ -19,4 +19,9 @@ class Client extends Eloquent {
 		return $this->hasMany('Message');
 	}
 	
+	function user()
+	{
+		return $this->morphOne('User', 'loggable');
+	}
+	
 }

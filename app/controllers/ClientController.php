@@ -41,7 +41,8 @@ class ClientController extends BaseController {
 			$weixin->getOAuthInfo();
 		}
 		
-		$this->client = Client::where('open_id', Session::get('weixin.open_id'))->first();
+		$user = User::where('open_id', Session::get('weixin.open_id'))->first();
+		$user && $this->client = $user->loggable;
 		
 		$client = $this->client;
 		
@@ -62,7 +63,9 @@ class ClientController extends BaseController {
 			$chartData['sh300'][] = array(strtotime($quote->date) * 1000, round($quote->value, 2));
 		}
 		
-		return View::make('client/view-report', compact('product', 'client', 'chartData'));
+		$is_guest = false;
+		
+		return View::make('client/view-report', compact('product', 'client', 'chartData', 'is_guest'));
 	}
 	
 }
