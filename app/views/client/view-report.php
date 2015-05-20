@@ -32,6 +32,7 @@
 			</thead>
 			<tbody>
 				<?php foreach($product->quotes()->dateDescending()->get() as $quote){ ?>
+				<?php if($quote->date->dayOfWeek !== 5) continue; ?>
 				<tr>
 					<td><?=$quote->date->toDateString()?></td>
 					<td><?=$quote->value?></td>
