@@ -53,6 +53,10 @@ class ClientController extends BaseController {
 
 			foreach($product->quotes()->dateAscending()->get() as $quote){
 				$chartData[$product->id][] = array(strtotime($quote->date) * 1000, round($quote->value, 2));
+				if($product->type === '结构化')
+				{
+					$chartData[$product->id . '_inferior'][] = array(strtotime($quote->date) * 1000, round($quote->value_inferior, 2));
+				}
 			}
 		}
 		

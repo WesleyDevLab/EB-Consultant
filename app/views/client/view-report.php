@@ -22,7 +22,8 @@
 			<thead>
 				<tr>
 					<th>日期</th>
-					<th>净值</th>
+					<th>单位净值</th>
+					<?php if($product->type === '结构化'){ ?><th>劣后净值</th><?php } ?>
 					<?php if(!$is_guest){ ?><th>市值</th><?php } ?>
 					<?php if(isset($consultant)){ ?>
 					<th>操作</th>
@@ -34,6 +35,7 @@
 				<tr>
 					<td><?=$quote->date->toDateString()?></td>
 					<td><?=$quote->value?></td>
+					<?php if($product->type === '结构化'){ ?><td><?=$quote->value_inferior?></td><?php } ?>
 					<?php if(!$is_guest){ ?><td>¥<?=$quote->cap?></td><?php } ?>
 					<?php if(isset($consultant)){ ?>
 					<td><a href="<?=url()?>/make-report/<?=$product->id?>/<?=$quote->id?>" class="btn btn-xs btn-info">修改</a></td>
@@ -65,8 +67,17 @@
 			series: [
 				<?php if(isset($product)){ ?>
 				{
-					name: '本账户',
+					name: '<?=$product->name?> 单位净值',
 					data: <?=@json_encode($chartData[$product->id])?>,
+					tooltip: {
+						valueDecimals: 2
+					}
+				},
+				<?php } ?>
+				<?php if(isset($product) && $product->type === '结构化'){ ?>
+				{
+					name: '<?=$product->name?> 劣后净值',
+					data: <?=@json_encode($chartData[$product->id . '_inferior'])?>,
 					tooltip: {
 						valueDecimals: 2
 					}
