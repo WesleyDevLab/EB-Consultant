@@ -32,7 +32,7 @@
 			</thead>
 			<tbody>
 				<?php foreach($product->quotes()->dateDescending()->get() as $quote){ ?>
-				<?php if($quote->date->dayOfWeek !== 5) continue; ?>
+				<?php if($quote->date->dayOfWeek !== 5 && !isset($consultant)) continue; ?>
 				<tr>
 					<td><?=$quote->date->toDateString()?></td>
 					<td><?=$quote->value?></td>
@@ -81,7 +81,8 @@
 					data: <?=@json_encode($chartData[$product->id . '_inferior'])?>,
 					tooltip: {
 						valueDecimals: 2
-					}
+					},
+					color: '#F66'
 				},
 				<?php } ?>
 				{
@@ -89,7 +90,8 @@
 					data: <?=json_encode($chartData['sh300'])?>,
 					tooltip: {
 						valueDecimals: 2
-					}
+					},
+					color: '#AAA'
 				}
 			],
 		
