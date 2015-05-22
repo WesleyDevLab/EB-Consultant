@@ -60,8 +60,10 @@ class NewsController extends BaseController {
 			}
 		}
 		
+		$latest_quote_date = $product->quotes()->dateDescending()->first()->date;
+		
 		$sh300 = Product::where('name', '沪深300指数')->first();
-		$quotes = $sh300 ? $sh300->quotes()->where('date', '>=', $product->start_date)->dateAscending()->get() : array();
+		$quotes = $sh300 ? $sh300->quotes()->where('date', '>=', $product->start_date)->where('date', '<=', isset($latest_quote_date) ? $latest_quote_date : date('Y-m-d'))->dateAscending()->get() : array();
 		$chartData['sh300'] = array();
 		foreach($quotes as $quote){
 			$chartData['sh300'][] = array(strtotime($quote->date) * 1000, round($quote->value, 2));
