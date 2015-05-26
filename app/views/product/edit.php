@@ -1,9 +1,10 @@
 <?php echo View::make('header'); ?>
 
 <div class="page-header">
-	<h2 class="text-center">私募客户产品登记</h2>
+	<h2 class="text-center">私募产品登记</h2>
 </div>
-<form class="form-horizontal" role="form" method="post">
+<form class="form-horizontal" role="form" method="post" action="<?=url(isset($product) ? 'product/' . $product->id : 'product')?>">
+	<?php if(isset($product)){ ?><input type="hidden" name="_method" value="PUT"><?php } ?>
 	<div class="form-group">
 		<label class="control-label col-sm-2">名称*</label>
 		<div class="col-sm-10">
@@ -37,7 +38,7 @@
 	<div class="form-group">
 		<label class="control-label col-sm-2">产品成立日期*</label>
 		<div class="col-sm-10">
-			<input type="date" name="start_date" value="<?=$product ? $product->start_date->toDateString() : ''?>" required class="form-control">
+			<input type="date" name="start_date" value="<?=isset($product) ? $product->start_date->toDateString() : ''?>" required class="form-control">
 		</div>
 	</div>
 	<fieldset id="single"<?php if(@$product->type !== '单账户'){ ?> style="display:none"<?php } ?>>
@@ -145,9 +146,11 @@
 	<?php if(!isset($product)){ ?>
 	<button type="submit" class="btn btn-primary btn-lg btn-block">登记</button>
 	<?php }else{ ?>
+	<?php if($mp !== 'news'){ ?>
 	<button type="submit" class="btn btn-primary btn-lg">更新</button>
 	<button type="submit" name="action" value="remove" class="btn btn-danger btn-lg">删除</button>
-	<a href="<?=url()?>/view-report/<?=$product->id?>" class="btn btn-info btn-lg">查看报告</a>
+	<?php } ?>
+	<a href="<?=url('product/' . $product->id . '/quote')?>" class="btn btn-info btn-lg">查看报告</a>
 	<?php } ?>
 </form>
 

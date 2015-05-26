@@ -16,10 +16,10 @@
 			<h4><?=$product->name?> <span class="small"><?=$product->type?></span></h4>
 		</td>
 		<td>
-			<a href="<?=url('view-report/' . $product->id)?>" class="btn btn-default"><span class="glyphicon glyphicon-stats"></span> 报告</a>
+			<a href="<?=url('product/' . $product->id . '/quote')?>" class="btn btn-default"><span class="glyphicon glyphicon-stats"></span> 报告</a>
 		</td>
 		<td>
-			<a href="<?=url('view-client/' . $product->id)?>" class="btn btn-default"><span class="glyphicon glyphicon-edit"></span> 资料</a>
+			<a href="<?=url('product/' . $product->id)?>" class="btn btn-default"><span class="glyphicon glyphicon-edit"></span> 资料</a>
 		</td>
 	</tr>
 	<?php } ?>

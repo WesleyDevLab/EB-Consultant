@@ -4,6 +4,8 @@ use Weixin\Utils\WXBizMsgCrypt;
 
 class WeixinQY {
 	
+	public $account;
+	
 	private $corp_id;
 	private $secret;
 	private $agent_id;
@@ -12,7 +14,9 @@ class WeixinQY {
 	
 	protected $wxcpt;
 			
-	function __construct() {
+	function __construct($account = 'default') {
+		
+		$this->account = $account;
 		
 		// 从配置中获取这些公众账号身份信息
 		foreach(array(
@@ -22,7 +26,7 @@ class WeixinQY {
 			'token',
 			'encoding_aes_key',
 		) as $item){
-			$this->$item = Config::get('weixin.consultant.' . $item);
+			$this->$item = Config::get('weixin.' . $account . '.' . $item);
 		}
 		
 		$this->wxcpt = new WXBizMsgCrypt($this->token, $this->encoding_aes_key, $this->corp_id);
@@ -269,7 +273,12 @@ class WeixinQY {
 		
 		$user_info = $this->call($url);
 		
-		Log::info(json_encode($user_info, JSON_UNESCAPED_UNICODE));
+		if(!$user_info->UserId)
+		{
+			throw new Exception('Weixin OAuth failed. ' . json_encode($user_info), 401);
+		}
+
+		Session::set('weixin.open_id', $user_info->UserId);
 		
 		return $user_info;
 	}

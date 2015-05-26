@@ -3,7 +3,8 @@
 <div class="page-header">
 	<h2 class="text-center">私募投顾注册</h2>
 </div>
-<form class="form-horizontal" role="form" method="post">
+<form class="form-horizontal" role="form" method="post" action="<?=url(isset($consultant) ? 'consultant/' . $consultant->id : 'consultant')?>">
+	<?php if(isset($consultant)){ ?><input type="hidden" name="_method" value="PUT"><?php } ?>
 	<div class="form-group">
 		<div class="col-sm-offset-2 col-sm-10">
 			<div class="btn-group btn-block" data-toggle="buttons">
@@ -188,8 +189,8 @@
 			</label>
 		</div>
 	</div>
-	<?php }elseif($consultant){ ?>
-	<a href="<?=url()?>/view-client?consultant_id=<?=$consultant->id?>" class="btn btn-info btn-block btn-lg">查看客户产品</a>
+	<?php }elseif(isset($consultant)){ ?>
+	<a href="<?=url('/product?consultant_id=' . $consultant->id)?>" class="btn btn-info btn-block btn-lg">查看产品</a>
 	<?php } ?>
 	<hr>
 	<button type="submit" class="btn btn-primary btn-block btn-lg"><?=empty($consultant) ? '注册' : '更新'?></button>

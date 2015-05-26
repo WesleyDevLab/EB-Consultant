@@ -11,40 +11,30 @@
 |
 */
 
-Route::get('/', function()
-{
-	return View::make('hello');
-});
+Route::get('/', 'HomeController@showWelcome');
 
 Route::model('product', 'Product');
 Route::model('quote', 'Quote');
-Route::model('client', 'Client');
 Route::model('consultant', 'Consultant');
 
-Route::group(array('domain' => 'consultant.ebillion.com.cn'), function()
+Route::group(array('domain' => Config::get('weixin.consultant.domain')), function()
 {
-	Route::any('wx', 'ConsultantController@serveWeixin');
-	Route::any('signup', 'ConsultantController@signup');
-	Route::any('view-consultant/{consultant?}', 'ConsultantController@viewConsultant');
-	Route::any('view-client/{product?}', 'ConsultantController@viewClient');
-	Route::any('register-client', 'ConsultantController@viewClient');
-	Route::any('make-report/{product?}/{quote?}', 'ConsultantController@makeReport');
-	Route::any('view-report/{product}', 'ConsultantController@viewReport');
+	Route::any('wx', 'WeixinController@serveConsultant');
 });
 
-Route::group(array('domain' => 'client.ebillion.com.cn'), function()
+Route::group(array('domain' => Config::get('weixin.client.domain')), function()
 {
-	Route::any('wx', 'ClientController@serveWeixin');
-	Route::any('signup', 'ClientController@signup');
-	Route::any('view-report', 'ClientController@viewReport');
-	Route::any('update-menu', 'ClientController@updateMenu');
+	Route::any('wx', 'WeixinController@serveClient');
+	Route::get('update-menu', 'WeixinController@updateClientMenu');
 });
 
-Route::group(array('domain' => 'news.ebillion.com.cn'), function()
+Route::group(array('domain' => Config::get('weixin.news.domain')), function()
 {
-	Route::any('wx', 'NewsController@serveWeixin');
-	Route::get('consultant', 'NewsController@viewConsultant');
-	Route::get('product', 'NewsController@viewProduct');
-	Route::get('report/{product}', 'NewsController@viewReport');
+	Route::any('wx', 'WeixinController@serveGuest');
 });
 
+Route::post('product/{product}/quote/{quote}', 'ProductQuoteController@update');
+
+Route::resource('product', 'ProductController');
+Route::resource('consultant', 'ConsultantController');
+Route::resource('product.quote', 'ProductQuoteController', array('except'=>array('show')));

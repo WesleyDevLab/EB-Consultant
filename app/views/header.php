@@ -32,6 +32,7 @@
 			header { padding: 1px; height: 1px; background: #A700D5; margin-bottom: 10px; }
 			footer { padding: 10px; }
 			.page-header { margin-top: 20px; }
+			a:visited { color: inherit; }
 		</style>
 		
 		<script type="text/javascript" src="<?=url()?>/packages/jquery/dist/jquery.min.js"></script>
