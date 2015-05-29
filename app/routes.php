@@ -25,12 +25,13 @@ Route::group(array('domain' => Config::get('weixin.consultant.domain')), functio
 Route::group(array('domain' => Config::get('weixin.client.domain')), function()
 {
 	Route::any('wx', 'WeixinController@serveClient');
-	Route::get('update-menu', 'WeixinController@updateClientMenu');
+	Route::get('update-menu', 'WeixinController@updateMenu');
 });
 
 Route::group(array('domain' => Config::get('weixin.news.domain')), function()
 {
 	Route::any('wx', 'WeixinController@serveGuest');
+	Route::get('update-menu', 'WeixinController@updateMenu');
 });
 
 Route::post('product/{product}/quote/{quote}', 'ProductQuoteController@update');

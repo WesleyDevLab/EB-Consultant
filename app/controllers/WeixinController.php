@@ -23,9 +23,9 @@ class WeixinController extends BaseController {
 		}
 	}
 	
-	public function updateClientMenu()
+	public function updateMenu()
 	{
-		$menu_config = ConfigModel::firstOrCreate(array('key' => 'wx_client_menu'));
+		$menu_config = ConfigModel::firstOrCreate(array('key' => 'wx_menu.' . $this->weixin->account));
 		
 		if(!$menu_config->value){
 			$menu = $this->weixin->getMenu();
