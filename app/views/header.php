@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<meta charset="UTF-8">
-		<title>EB投顾报告平台</title>
+		<title><?=$weixin->name?></title>
 		
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, minimal-ui" />
 		<meta name="apple-mobile-web-app-capable" content="yes" />

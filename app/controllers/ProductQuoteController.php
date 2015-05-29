@@ -27,9 +27,7 @@ class ProductQuoteController extends BaseController {
 			$chart_data['sh300'][] = array(strtotime($quote->date) * 1000, round($quote->value, 2));
 		}
 		
-		$mp = $this->weixin->account;
-		
-		return View::make('product-quote/report', compact('product', 'chart_data', 'mp'));
+		return View::make('product-quote/report', compact('product', 'chart_data'));
 		
 	}
 	

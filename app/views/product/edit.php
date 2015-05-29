@@ -146,7 +146,7 @@
 	<?php if(!isset($product)){ ?>
 	<button type="submit" class="btn btn-primary btn-lg btn-block">登记</button>
 	<?php }else{ ?>
-	<?php if($mp !== 'news'){ ?>
+	<?php if($weixin->account !== 'news'){ ?>
 	<button type="submit" class="btn btn-primary btn-lg">更新</button>
 	<button type="submit" name="action" value="remove" class="btn btn-danger btn-lg">删除</button>
 	<?php } ?>

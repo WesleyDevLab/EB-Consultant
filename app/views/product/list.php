@@ -4,8 +4,8 @@
 	<h2 class="text-center">私募产品列表</h2>
 </div>
 
-<?php if($mp !== 'news'){ ?>
 <a href="<?=url('product/create')?>" class="btn btn-primary btn-block btn-lg">登记新产品</a>
+<?php if($weixin->account !== 'news'){ ?>
 <hr>
 <?php } ?>
 <table class="table table-striped">
@@ -14,7 +14,7 @@
 		<td>
 			<h4><?=$product->name?> <span class="small"><?=$product->type?></span></h4>
 		</td>
-		<?php if($mp !== 'news'){ ?>
+		<?php if($weixin->account !== 'news'){ ?>
 		<td>
 			<a href="<?=url('product/' . $product->id)?>" class="btn btn-default"><span class="glyphicon glyphicon-edit"></span> 资料</a>
 		</td>

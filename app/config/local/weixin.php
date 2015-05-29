@@ -7,8 +7,7 @@ return array(
 		'agent_id' => 0,
 		'token' => '',
 		'encoding_aes_key' => '',
-		'domain'=>'',
-		'name'=>''
+		'domain'=>'localhost',
 	),
 	'client'=>array(
 		'app_id' => '',
@@ -16,6 +15,5 @@ return array(
 		'token' => '',
 		'encoding_aes_key' => '',
 		'domain',
-		'name'=>''
 	)
 );

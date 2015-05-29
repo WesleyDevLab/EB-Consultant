@@ -23,10 +23,8 @@ class ProductController extends BaseController {
 		
 		$products = $query->get();
 		
-		$mp = $this->weixin->account;
-		$user = $this->user;
 		
-		return View::make('product/list', compact('products', 'mp', 'user'));
+		return View::make('product/list', compact('products'));
 	}
 
 
@@ -61,7 +59,6 @@ class ProductController extends BaseController {
 	 */
 	public function show(Product $product)
 	{
-		$mp = $this->weixin->account;;
 		return View::make('product/edit', compact('product', 'mp'));
 	}
 

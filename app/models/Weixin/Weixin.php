@@ -2,11 +2,12 @@
 /**
  * Weixin library for Laravel
  * @author Uice Lu <uicestone@gmail.com>
- * @version 0.63 (2015/5/19)
+ * @version 0.64 (2015/5/29)
  */
 class Weixin {
 	
 	public $account;
+	public $name;
 	
 	private $token; // 微信公众账号后台 / 高级功能 / 开发模式 / 服务器配置
 	private $app_id; // 开发模式 / 开发者凭据
@@ -18,6 +19,7 @@ class Weixin {
 	public function __construct($account = 'default')
 	{
 		$this->account = $account;
+		$this->name = Config::get('weixin.'.  $account . '.name');
 		// 从WordPress配置中获取这些公众账号身份信息
 		foreach(array(
 			'app_id',

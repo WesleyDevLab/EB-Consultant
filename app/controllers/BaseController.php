@@ -61,6 +61,9 @@ class BaseController extends Controller {
 		{
 			$this->user->is_admin = in_array($this->user->open_id, $administrators);
 		}
+		
+		View::share('weixin', $this->weixin);
+		View::share('user', $this->user);
 	}
 
 
