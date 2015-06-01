@@ -12,8 +12,8 @@
 	<?php foreach($products as $product){ ?>
 	<tr role="presentation">
 		<td>
-			<h4><?=$product->name?> <span class="small"><?=$product->type?><?php 
-			if($user && ($user->id === $product->consultant_id || $user->is_admin) && in_array($product->type, array('单账户', '伞型'))){?> <?=$product->clients->first()->name?><?php } ?></span></h4>
+			<h4><?=$product->name?> <span class="small"><?=$product->type?>
+			<?php if($user && ($user->id === $product->consultant_id || $user->is_admin) && in_array($product->type, array('单账户', '伞型'))){?> <?=$product->clients->first()->name?><?php } ?></span></h4>
 		</td>
 		<?php if($weixin->account !== 'news'){ ?>
 		<td>

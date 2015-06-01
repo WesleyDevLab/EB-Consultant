@@ -21,7 +21,7 @@ class ProductQuoteController extends BaseController {
 		
 		foreach($quotes as $quote){
 			$chart_data[$product->id][] = array(strtotime($quote->date) * 1000, round($quote->value, 2));
-			if($product->type === '结构化')
+			if(in_array($product->type, array('结构化', '伞型')))
 			{
 				$chart_data[$product->id . '_inferior'][] = array(strtotime($quote->date) * 1000, round($quote->value_inferior, 2));
 			}
@@ -63,7 +63,9 @@ class ProductQuoteController extends BaseController {
 			return Redirect::to('consultant/edit');
 		}
 		
-		return View::make('product-quote/edit', compact('product'));
+		$product_type = in_array($product->type, array('结构化', '管理型')) ? 'product' : 'account';
+		
+		return View::make('product-quote/edit', compact('product', 'product_type'));
 	}
 
 
@@ -96,7 +98,9 @@ class ProductQuoteController extends BaseController {
 			return Redirect::to('consultant/edit');
 		}
 		
-		return View::make('product-quote/edit', compact('product', 'quote'));
+		$product_type = in_array($product->type, array('结构化', '管理型')) ? 'product' : 'account';
+		
+		return View::make('product-quote/edit', compact('product', 'quote', 'product_type'));
 	}
 
 
@@ -130,6 +134,14 @@ class ProductQuoteController extends BaseController {
 		{
 			$quote->value_inferior = Input::get('value_inferior');
 		}
+		
+		if($product->type === '伞型')
+		{
+			$cap_inferior = $product->meta->劣后资金规模;
+			$cap_preferred = $product->meta->劣后资金规模 * $product->meta->杠杆配比;
+			$quote->value_inferior = ($quote->cap - $cap_preferred - $product->getCost()) / $cap_inferior;
+		}
+		
 		$quote->product()->associate($product);
 		$quote->save();
 
