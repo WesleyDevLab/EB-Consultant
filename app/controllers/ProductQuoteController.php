@@ -115,8 +115,21 @@ class ProductQuoteController extends BaseController {
 		}
 
 		$quote->fill(Input::all());
-		$quote->cap = Input::get('cap');
-		$quote->value = Input::get('cap') / $product->initial_cap;
+		
+		if(Input::get('cap'))
+		{
+			$quote->cap = Input::get('cap');
+			$quote->value = Input::get('cap') / $product->initial_cap;
+		}
+		elseif(Input::get('value'))
+		{
+			$quote->value = Input::get('value');
+		}
+		
+		if(Input::get('value_inferior'))
+		{
+			$quote->value_inferior = Input::get('value_inferior');
+		}
 		$quote->product()->associate($product);
 		$quote->save();
 

@@ -11,6 +11,7 @@
 			<input type="date" name="date" value="<?=isset($quote) ? $quote->date->toDateString() : date('Y-m-d')?>" required class="form-control">
 		</div>
 	</div>
+	<?php if($product_type === 'account'){ ?>
 	<div class="form-group">
 		<label class="control-label col-sm-2">市值*</label>
 		<div class="col-sm-10">
@@ -21,6 +22,22 @@
 			</div>
 		</div>
 	</div>
+	<?php }else{ ?>
+	<div class="form-group">
+		<label class="control-label col-sm-2">单位净值*</label>
+		<div class="col-sm-10">
+			<input type="number" step="0.0001" min="0" name="value" value="<?=@$quote->value?>" required class="form-control">
+		</div>
+	</div>
+	<?php } ?>
+	<?php if($product->type === '结构化'){ ?>
+	<div class="form-group">
+		<label class="control-label col-sm-2">劣后净值*</label>
+		<div class="col-sm-10">
+			<input type="number" step="0.0001" min="0" name="value_inferior" value="<?=@$quote->value_inferior?>" required class="form-control">
+		</div>
+	</div>
+	<?php } ?>
 	<div class="form-group">
 		<label class="control-label col-sm-2">备注</label>
 		<div class="col-sm-10">
