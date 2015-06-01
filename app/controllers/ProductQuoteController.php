@@ -10,7 +10,16 @@ class ProductQuoteController extends BaseController {
 	{
 		$chart_data = array();
 		
-		foreach($product->quotes()->dateAscending()->get() as $quote){
+		$query = $product->quotes()->dateAscending();
+		
+		if(!$this->user instanceof Consultant && (!$this->user || !$this->user->is_admin))
+		{
+			$query->fridayOnly();
+		}
+		
+		$quotes = $query->get();
+		
+		foreach($quotes as $quote){
 			$chart_data[$product->id][] = array(strtotime($quote->date) * 1000, round($quote->value, 2));
 			if($product->type === '结构化')
 			{
@@ -20,14 +29,24 @@ class ProductQuoteController extends BaseController {
 		
 		$latest_quote_date = $product->quotes()->dateDescending()->first()->date;
 		
-		$sh300 = Product::where('name', '沪深300指数')->first();
-		$quotes = $sh300 ? $sh300->quotes()->where('date', '>=', $product->start_date)->where('date', '<=', isset($latest_quote_date) ? $latest_quote_date : date('Y-m-d'))->dateAscending()->get() : array();
+		$sh300 = Product::firstOrCreate(array('name'=>'沪深300指数'));
+		
+		$query_sh300 = $sh300->quotes()->where('date', '>=', $product->start_date)->where('date', '<=', isset($latest_quote_date) ? $latest_quote_date : date('Y-m-d'))->dateAscending();
+		
+		if(!$this->user instanceof Consultant && (!$this->user || !$this->user->is_admin))
+		{
+			$query_sh300->fridayOnly();
+		}
+		
+		$quotes_sh300 = $query_sh300->get();
+		
 		$chart_data['sh300'] = array();
-		foreach($quotes as $quote){
+		
+		foreach($quotes_sh300 as $quote){
 			$chart_data['sh300'][] = array(strtotime($quote->date) * 1000, round($quote->value, 2));
 		}
 		
-		return View::make('product-quote/report', compact('product', 'chart_data'));
+		return View::make('product-quote/report', compact('product', 'quotes', 'chart_data'));
 		
 	}
 	

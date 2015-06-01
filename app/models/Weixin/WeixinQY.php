@@ -5,6 +5,7 @@ use Weixin\Utils\WXBizMsgCrypt;
 class WeixinQY {
 	
 	public $account;
+	public $name;
 	
 	private $corp_id;
 	private $secret;
@@ -17,6 +18,7 @@ class WeixinQY {
 	function __construct($account = 'default') {
 		
 		$this->account = $account;
+		$this->name = Config::get('weixin.' . $account . '.name');
 		
 		// 从配置中获取这些公众账号身份信息
 		foreach(array(
@@ -273,7 +275,7 @@ class WeixinQY {
 		
 		$user_info = $this->call($url);
 		
-		if(!$user_info->UserId)
+		if(!isset($user_info->UserId))
 		{
 			throw new Exception('Weixin OAuth failed. ' . json_encode($user_info), 401);
 		}

@@ -14,7 +14,7 @@
 		<?php if($weixin->account !== 'news'){ ?>
 		<ul>
 			<li>累计成本：¥<?=$product->getCost()?>（仅供参考）</li>
-			<li>浮动盈亏：<?=@round(($product->quotes()->dateDescending()->first()->cap - $product->initial_cap) / $product->initial_cap * 100, 2)?>%</li>
+			<li>浮动盈亏：<?=round(($quotes->last()->value - 1) * 100, 2)?>%</li>
 		</ul>
 		<?php } ?>
 
@@ -24,20 +24,19 @@
 					<th>日期</th>
 					<th>单位净值</th>
 					<?php if($product->type === '结构化'){ ?><th>劣后净值</th><?php } ?>
-					<?php if($weixin->account !== 'news'){ ?><th>市值</th><?php } ?>
+					<?php if($weixin->account !== 'news' && in_array($product->type, array('单账户', '伞型'))){ ?><th>市值</th><?php } ?>
 					<?php if($weixin->account === 'consultant'){ ?>
 					<th>操作</th>
 					<?php } ?>
 				</tr>
 			</thead>
 			<tbody>
-				<?php foreach($product->quotes()->dateDescending()->get() as $quote){ ?>
-				<?php if($quote->date->dayOfWeek !== 5 && $weixin->account !== 'consultant') continue; ?>
+				<?php foreach($quotes->sortByDesc('date') as $quote){ ?>
 				<tr>
 					<td><?=$quote->date->toDateString()?></td>
 					<td><?=$quote->value?></td>
 					<?php if($product->type === '结构化'){ ?><td><?=$quote->value_inferior?></td><?php } ?>
-					<?php if($weixin->account !== 'news'){ ?><td>¥<?=$quote->cap?></td><?php } ?>
+					<?php if($weixin->account !== 'news' && in_array($product->type, array('单账户', '伞型'))){ ?><td>¥<?=$quote->cap?></td><?php } ?>
 					<?php if($weixin->account === 'consultant'){ ?>
 					<td><a href="<?=url('product/' . $product->id . '/quote/' . $quote->id . '/edit')?>" class="btn btn-xs btn-info">修改</a></td>
 					<?php } ?>
@@ -75,7 +74,7 @@
 					}
 				},
 				<?php } ?>
-				<?php if(isset($product) && $product->type === '结构化'){ ?>
+				<?php if(isset($product) && $product->type === '结构化' && $quotes[0]->value_inferior){ ?>
 				{
 					name: '<?=$product->name?> 劣后净值',
 					data: <?=@json_encode($chart_data[$product->id . '_inferior'])?>,

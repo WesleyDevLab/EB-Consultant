@@ -20,6 +20,11 @@ class Quote extends Eloquent {
 		return $query->orderBy('date', 'ASC');
 	}
 	
+	function scopeFridayOnly($query)
+	{
+		return $query->whereRaw('DAYOFWEEK(`date`) = 6');
+	}
+	
 	function scopeDateDescending($query)
 	{
 		return $query->orderBy('date', 'DESC');

@@ -21,8 +21,13 @@ class ProductController extends BaseController {
 			$query->where('consultant_id', $this->user->loggable->id);
 		}
 		
-		$products = $query->get();
+		if(Input::query('type') === 'account'){
+			$query->whereIn('type', array('单账户', '伞型'));
+		}elseif(Input::query('type') === 'product'){
+			$query->whereIn('type', array('结构化', '管理型'));
+		}
 		
+		$products = $query->get();
 		
 		return View::make('product/list', compact('products'));
 	}
@@ -35,7 +40,8 @@ class ProductController extends BaseController {
 	 */
 	public function create()
 	{
-		return View::make('product/edit');
+		$type = Input::query('type') ? Input::query('type') : 'account';
+		return View::make('product/edit', compact('type'));
 	}
 
 
@@ -59,7 +65,8 @@ class ProductController extends BaseController {
 	 */
 	public function show(Product $product)
 	{
-		return View::make('product/edit', compact('product', 'mp'));
+		$type = in_array($product->type, array('结构化', '管理型')) ? 'product' : 'account';
+		return View::make('product/edit', compact('product', 'type'));
 	}
 
 
