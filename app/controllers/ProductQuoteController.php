@@ -139,7 +139,7 @@ class ProductQuoteController extends BaseController {
 		{
 			$cap_inferior = $product->meta->劣后资金规模;
 			$cap_preferred = $product->meta->劣后资金规模 * $product->meta->杠杆配比;
-			$quote->value_inferior = ($quote->cap - $cap_preferred - $product->getCost()) / $cap_inferior;
+			$quote->value_inferior = ($quote->cap - $cap_preferred - $product->getCost($quote->date)) / $cap_inferior;
 		}
 		
 		$quote->product()->associate($product);

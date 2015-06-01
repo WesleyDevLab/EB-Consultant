@@ -25,9 +25,9 @@ class Product extends Eloquent {
 		return $this->hasMany('Quote');
 	}
 	
-	function getCost()
+	function getCost($date = null)
 	{
-		$days_passed = $this->start_date->diffInDays();
+		$days_passed = $this->start_date->diffInDays($date);
 		
 		$cost = 0.00;
 		
