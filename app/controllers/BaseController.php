@@ -7,7 +7,6 @@ class BaseController extends Controller {
 
 	function __construct()
 	{
-		
 		// initialize weixin library
 		switch(Input::server('HTTP_HOST'))
 		{
@@ -28,30 +27,39 @@ class BaseController extends Controller {
 		}
 		
 		// user authentication
-		if(!Session::get('user_id') && $this->weixin->account !== 'news' && strpos(Input::server('HTTP_USER_AGENT'), 'MicroMessenger') !== false)
+		if($this->weixin->account !== 'news' && strpos(Input::server('HTTP_USER_AGENT'), 'MicroMessenger') !== false)
 		{
-			// write weixin.open_id to Session
-			if($this->weixin->account === 'consultant')
+			
+			if(Session::get('user_id'))
 			{
-				$this->weixin->oauth_get_user_info();
+				$this->user = User::find(Session::get('user_id'));
 			}
-			elseif($this->weixin->account === 'client')
+			else
 			{
-				$this->weixin->getOAuthInfo();
-			}
-			
-			$this->user = User::where('open_id', Session::get('weixin.open_id'))->first();
-			
-			Session::set('user_id', $this->user->id);
-		}
-		
-		if(is_null($this->user) && $this->weixin->account !== 'news' && strpos(Input::server('HTTP_USER_AGENT'), 'MicroMessenger') !== false)
-		{
-			$this->user = User::where('open_id', Session::get('weixin.open_id'))->first();
-			
-			if(is_null($this->user))
-			{
-				throw new Exception('User not found for open_id: ' . Session::get('weixin.open_id'), 401);
+				if(!Session::get('weixin.open_id'))
+				{
+					// write weixin.open_id to Session
+					if($this->weixin->account === 'consultant')
+					{
+						$this->weixin->oauth_get_user_info();
+					}
+					elseif($this->weixin->account === 'client')
+					{
+						$this->weixin->getOAuthInfo();
+					}
+				}
+				
+				$this->user = User::where('open_id', Session::get('weixin.open_id'))->first();
+
+				if($this->user)
+				{
+					Session::set('user_id', $this->user->id);
+				}
+				elseif($this->weixin->account === 'consultant' && Route::currentRouteName() !== 'consultant.create')
+				{
+					header('Location: ' . url('consultant/create'));
+					exit;
+				}
 			}
 		}
 		

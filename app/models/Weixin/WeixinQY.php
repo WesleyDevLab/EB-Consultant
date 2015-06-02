@@ -65,7 +65,7 @@ class WeixinQY {
 			$method = 'POST';
 		}
 		
-		Log::debug('Method: ' . $method);
+//		Log::debug('Method: ' . $method);
 		
 		switch(strtoupper($method)){
 			case 'GET':
