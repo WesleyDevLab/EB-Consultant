@@ -34,7 +34,7 @@
 	<div class="form-group">
 		<label class="control-label col-sm-2">劣后净值*</label>
 		<div class="col-sm-10">
-			<input type="number" step="0.0001" min="0" name="value_inferior" value="<?=@$quote->value_inferior?>" required class="form-control">
+			<input type="number" step="0.0001" min="0" name="value_inferior" value="<?=@$quote->value_inferior?>" class="form-control">
 		</div>
 	</div>
 	<?php } ?>
