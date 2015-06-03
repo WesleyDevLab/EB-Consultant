@@ -1,11 +1,11 @@
 <?php echo View::make('header'); ?>
 
 <div class="page-header">
-	<h2 class="text-center">私募<?=Input::query('type') === 'account' ? '专户' : '产品'?>列表</h2>
+	<h2 class="text-center">私募<?=Input::query('category') === 'product' ? '产品' : '专户'?>列表</h2>
 </div>
 
 <?php if($weixin->account !== 'news'){ ?>
-<a href="<?=url('product/create?type=' . Input::query('type'))?>" class="btn btn-primary btn-block btn-lg">登记新<?=Input::query('type') === 'account' ? '专户' : '产品'?></a>
+<a href="<?=url('product/create?type=' . Input::query('category'))?>" class="btn btn-primary btn-block btn-lg">登记新<?=Input::query('category') === 'product' ? '产品' : '专户'?></a>
 <hr>
 <?php } ?>
 <table class="table table-striped">
@@ -13,7 +13,7 @@
 	<tr role="presentation">
 		<td>
 			<h4><?=$product->name?> <span class="small"><?=$product->type?>
-			<?php if($user && ($user->id === $product->consultant_id || $user->is_admin) && in_array($product->type, array('单账户', '伞型'))){?> <?=$product->clients->first()->name?><?php } ?></span></h4>
+			<?php if($user && ($user->id === $product->consultant_id || $user->is_admin) && $product->category === 'account'){?> <?=$product->clients->first()->name?><?php } ?></span></h4>
 		</td>
 		<?php if($weixin->account !== 'news'){ ?>
 		<td>

@@ -1,6 +1,6 @@
 <?php echo View::make('header'); ?>
 <div class="page-header">
-	<h2 class="text-center">净值报告 <small><?=isset($product) ? $product->name : ''?><?php if($user && ($user->id === $product->consultant_id || $user->is_admin) && in_array($product->type, array('单账户', '伞型'))){?> <?=$product->clients->first()->name?><?php } ?></small></h2>
+	<h2 class="text-center">净值报告 <small><?=isset($product) ? $product->name : ''?><?php if($user && ($user->id === $product->consultant_id || $user->is_admin) && $product->category === 'account'){?> <?=$product->clients->first()->name?><?php } ?></small></h2>
 </div>
 <?php if(!isset($product)){ ?>
 <div class="alert alert-warning">
@@ -24,7 +24,7 @@
 					<th>日期</th>
 					<th>单位净值</th>
 					<?php if(in_array($product->type, array('结构化', '伞型'))){ ?><th>劣后净值</th><?php } ?>
-					<?php if($weixin->account !== 'news' && in_array($product->type, array('单账户', '伞型'))){ ?><th>市值</th><?php } ?>
+					<?php if($weixin->account !== 'news' && $product->type === 'account'){ ?><th>市值</th><?php } ?>
 					<?php if($weixin->account === 'consultant'){ ?>
 					<th>操作</th>
 					<?php } ?>
@@ -36,7 +36,7 @@
 					<td><?=$quote->date->toDateString()?></td>
 					<td><?=$quote->value?></td>
 					<?php if(in_array($product->type, array('结构化', '伞型'))){ ?><td><?=$quote->value_inferior?></td><?php } ?>
-					<?php if($weixin->account !== 'news' && in_array($product->type, array('单账户', '伞型'))){ ?><td>¥<?=$quote->cap?></td><?php } ?>
+					<?php if($weixin->account !== 'news' && $product->type === 'account'){ ?><td>¥<?=$quote->cap?></td><?php } ?>
 					<?php if($weixin->account === 'consultant'){ ?>
 					<td><a href="<?=url('product/' . $product->id . '/quote/' . $quote->id . '/edit')?>" class="btn btn-xs btn-info">修改</a></td>
 					<?php } ?>

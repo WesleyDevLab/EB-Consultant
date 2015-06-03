@@ -33,6 +33,7 @@ class BaseController extends Controller {
 			if(Session::get('user_id'))
 			{
 				$this->user = User::find(Session::get('user_id'));
+				Session::flush();
 			}
 			else
 			{
@@ -55,7 +56,7 @@ class BaseController extends Controller {
 				{
 					Session::set('user_id', $this->user->id);
 				}
-				elseif($this->weixin->account === 'consultant' && Route::currentRouteName() !== 'consultant.create')
+				elseif($this->weixin->account === 'consultant' && !in_array(Route::currentRouteName(), array('consultant.create', 'consultant.store')))
 				{
 					header('Location: ' . url('consultant/create'));
 					exit;

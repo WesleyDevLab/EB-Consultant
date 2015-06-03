@@ -63,9 +63,7 @@ class ProductQuoteController extends BaseController {
 			return Redirect::to('consultant/edit');
 		}
 		
-		$product_type = in_array($product->type, array('结构化', '管理型')) ? 'product' : 'account';
-		
-		return View::make('product-quote/edit', compact('product', 'product_type'));
+		return View::make('product-quote/edit', compact('product'));
 	}
 
 
@@ -98,9 +96,7 @@ class ProductQuoteController extends BaseController {
 			return Redirect::to('consultant/edit');
 		}
 		
-		$product_type = in_array($product->type, array('结构化', '管理型')) ? 'product' : 'account';
-		
-		return View::make('product-quote/edit', compact('product', 'quote', 'product_type'));
+		return View::make('product-quote/edit', compact('product', 'quote'));
 	}
 
 

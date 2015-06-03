@@ -50,12 +50,20 @@ class ConsultantController extends BaseController {
 			$user = new User();
 			$user->fill(array(
 				'name'=>Input::get('name'),
-				'open_id'=>Session::get('weixin.user_id')
+				'open_id'=>Session::get('weixin.open_id')
 			));
 			$user->loggable()->associate($consultant);
 			$user->save();
 			
-			return Redirect::to('product/edit');
+			if($consultant->type === '个人')
+			{
+				return Redirect::to('product/create');
+			}
+			else
+			{
+				return Redirect::to('product/create?category=product');
+			}
+			
 		}
 		else{
 			unset($this->user->is_admin);

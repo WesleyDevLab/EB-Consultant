@@ -11,7 +11,7 @@
 			<input type="date" name="date" value="<?=isset($quote) ? $quote->date->toDateString() : date('Y-m-d')?>" required class="form-control">
 		</div>
 	</div>
-	<?php if($product_type === 'account'){ ?>
+	<?php if($product->category === 'account'){ ?>
 	<div class="form-group">
 		<label class="control-label col-sm-2">市值*</label>
 		<div class="col-sm-10">

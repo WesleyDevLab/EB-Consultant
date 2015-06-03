@@ -21,11 +21,7 @@ class ProductController extends BaseController {
 			$query->where('consultant_id', $this->user->loggable->id);
 		}
 		
-		if(Input::query('type') === 'account'){
-			$query->whereIn('type', array('单账户', '伞型'));
-		}elseif(Input::query('type') === 'product'){
-			$query->whereIn('type', array('结构化', '管理型'));
-		}
+		$query->ofCategory(Input::query('category') ? Input::query('category') : 'account');
 		
 		$products = $query->get();
 		
@@ -40,8 +36,9 @@ class ProductController extends BaseController {
 	 */
 	public function create()
 	{
-		$type = Input::query('type') ? Input::query('type') : 'account';
-		return View::make('product/edit', compact('type'));
+		$product = new Product();
+		$product->category = Input::query('category') ? Input::query('category') : 'account';
+		return $this->edit($product);
 	}
 
 
@@ -65,8 +62,7 @@ class ProductController extends BaseController {
 	 */
 	public function show(Product $product)
 	{
-		$type = in_array($product->type, array('结构化', '管理型')) ? 'product' : 'account';
-		return View::make('product/edit', compact('product', 'type'));
+		return View::make('product/edit', compact('product'));
 	}
 
 
@@ -122,7 +118,7 @@ class ProductController extends BaseController {
 			));
 		}
 
-		if(count($product->clients) === 0 && in_array($product->type, array('单账户', '伞型') ))
+		if(count($product->clients) === 0 && $product->category === 'account')
 		{
 			$client = Client::firstOrCreate(array('name'=>Input::get('name')));
 			
@@ -146,7 +142,7 @@ class ProductController extends BaseController {
 			$this->weixin->send_message($this->user->open_id, '客户 ' . $client->name . ' 登记成功，请客户在微信点击以下地址绑定：' . 'http://client.ebillion.com.cn/product/' . $product->id . '/quote?hash=' . $client_user->open_id . '，并关注“翊弼私募产品统计平台”微信公众账号。');
 		}
 		
-		return Redirect::to('product');
+		return Redirect::to('product?category=' . $product->category);
 	}
 
 

@@ -1,10 +1,10 @@
 <?php echo View::make('header'); ?>
 
 <div class="page-header">
-	<h2 class="text-center">私募<?=$type === 'account' ? '专户' : '产品'?>登记</h2>
+	<h2 class="text-center">私募<?=$product->category === 'account' ? '专户' : '产品'?>登记</h2>
 </div>
-<form class="form-horizontal" role="form" method="post" action="<?=url(isset($product) ? 'product/' . $product->id : 'product')?>">
-	<?php if(isset($product)){ ?><input type="hidden" name="_method" value="PUT"><?php } ?>
+<form class="form-horizontal" role="form" method="post" action="<?=url($product->exists ? 'product/' . $product->id : 'product')?>">
+	<?php if($product->exists){ ?><input type="hidden" name="_method" value="PUT"><?php } ?>
 	<div class="form-group">
 		<label class="control-label col-sm-2">名称*</label>
 		<div class="col-sm-10">
@@ -15,7 +15,7 @@
 		<label class="control-label col-sm-2">类型*</label>
 		<div class="col-sm-offset-2 col-sm-10">
 			<div class="btn-group btn-block" data-toggle="buttons">
-				<?php if($type === 'account'){ ?>
+				<?php if($product->category === 'account'){ ?>
 				<label class="btn btn-default col-xs-6<?php if(@$product->type === '单账户'){ ?> active<?php } ?>">
 					<?=Form::radio('type', '单账户', @$product->type === '单账户', array('required'))?>
 					单账户
@@ -37,7 +37,7 @@
 			</div>
 		</div>
 	</div>
-	<?php if($type === 'account'){ ?>
+	<?php if($product->category === 'account'){ ?>
 	<div class="form-group">
 		<label class="control-label col-sm-2">投顾分成比例*</label>
 		<div class="col-sm-10">
@@ -51,7 +51,7 @@
 	<div class="form-group">
 		<label class="control-label col-sm-2">产品成立日期*</label>
 		<div class="col-sm-10">
-			<input type="date" name="start_date" value="<?=isset($product) ? $product->start_date->toDateString() : ''?>" required class="form-control">
+			<input type="date" name="start_date" value="<?=$product->exists ? $product->start_date->toDateString() : ''?>" required class="form-control">
 		</div>
 	</div>
 	<fieldset id="single"<?php if(@$product->type !== '单账户'){ ?> style="display:none"<?php } ?>>
@@ -350,7 +350,7 @@
 			</div>
 		</div>
 	</fieldset>
-	<?php if($type === 'account'){ ?>
+	<?php if($product->category === 'account'){ ?>
 	<div class="form-group">
 		<label class="control-label col-sm-2">开户券商营业部*</label>
 		<div class="col-sm-10">
@@ -370,7 +370,7 @@
 			<textarea name="comments" class="form-control"><?=@$product->comments?></textarea>
 		</div>
 	</div>
-	<?php if(!isset($product)){ ?>
+	<?php if(!$product->exists){ ?>
 	<button type="submit" class="btn btn-primary btn-lg btn-block">登记</button>
 	<?php }else{ ?>
 	<?php if($weixin->account !== 'news'){ ?>

@@ -61,7 +61,7 @@
 			<label class="control-label col-sm-2">近三年平均收益率*</label>
 			<div class="col-sm-10">
 				<div class="input-group">
-					<input type="number" name="meta[近三年平均收益率]" value="<?=@$consultant->meta->近三年平均收益率?>" required class="form-control">
+					<input type="number" step="0.01" name="meta[近三年平均收益率]" value="<?=@$consultant->meta->近三年平均收益率?>" required class="form-control">
 					<div class="input-group-addon">%</div>
 				</div>
 			</div>
@@ -71,7 +71,7 @@
 			<div class="col-sm-10">
 				<div class="input-group">
 					<div class="input-group-addon">-</div>
-					<input type="number" name="meta[近三年最大回撤]" value="<?=@$consultant->meta->近三年最大回撤?>" required class="form-control">
+					<input type="number" step="0.01" name="meta[近三年最大回撤]" value="<?=@$consultant->meta->近三年最大回撤?>" required class="form-control">
 					<div class="input-group-addon">%</div>
 				</div>
 			</div>
@@ -82,25 +82,25 @@
 				<p><input type="text" name="meta[最优的三个产品][0][名称]" value="<?=@$consultant->meta->最优的三个产品[0]->名称?>" placeholder="名称" required class="form-control"></p>
 				<div class="input-group">
 					<div class="input-group-addon">人民币</div>
-					<input type="number" name="meta[最优的三个产品][0][规模]" value="<?=@$consultant->meta->最优的三个产品[0]->规模?>" placeholder="规模" required class="form-control">
+					<input type="number" step="0.01" name="meta[最优的三个产品][0][规模]" value="<?=@$consultant->meta->最优的三个产品[0]->规模?>" placeholder="规模" required class="form-control">
 					<div class="input-group-addon">万元</div>
-					<input type="number" name="meta[最优的三个产品][0][累计净值]" value="<?=@$consultant->meta->最优的三个产品[0]->累计净值?>" placeholder="累计净值" required class="form-control">
+					<input type="number" step="0.0001" min="0" name="meta[最优的三个产品][0][累计净值]" value="<?=@$consultant->meta->最优的三个产品[0]->累计净值?>" placeholder="累计净值" required class="form-control">
 				</div>
 				<br>
 				<p><input type="text" name="meta[最优的三个产品][1][名称]" value="<?=@$consultant->meta->最优的三个产品[1]->名称?>" placeholder="名称" required class="form-control"></p>
 				<div class="input-group">
 					<div class="input-group-addon">人民币</div>
-					<input type="number" name="meta[最优的三个产品][1][规模]" value="<?=@$consultant->meta->最优的三个产品[1]->规模?>" placeholder="规模" required class="form-control">
+					<input type="number" step="0.01" name="meta[最优的三个产品][1][规模]" value="<?=@$consultant->meta->最优的三个产品[1]->规模?>" placeholder="规模" required class="form-control">
 					<div class="input-group-addon">万元</div>
-					<input type="number" name="meta[最优的三个产品][1][累计净值]" value="<?=@$consultant->meta->最优的三个产品[1]->累计净值?>" placeholder="累计净值" required class="form-control">
+					<input type="number" step="0.0001" min="0" name="meta[最优的三个产品][1][累计净值]" value="<?=@$consultant->meta->最优的三个产品[1]->累计净值?>" placeholder="累计净值" required class="form-control">
 				</div>
 				<br>
 				<p><input type="text" name="meta[最优的三个产品][2][名称]" value="<?=@$consultant->meta->最优的三个产品[2]->名称?>" placeholder="名称" required class="form-control"></p>
 				<div class="input-group">
 					<div class="input-group-addon">人民币</div>
-					<input type="number" name="meta[最优的三个产品][2][规模]" value="<?=@$consultant->meta->最优的三个产品[2]->规模?>" placeholder="规模" required class="form-control">
+					<input type="number" step="0.01" name="meta[最优的三个产品][2][规模]" value="<?=@$consultant->meta->最优的三个产品[2]->规模?>" placeholder="规模" required class="form-control">
 					<div class="input-group-addon">万元</div>
-					<input type="number" name="meta[最优的三个产品][2][累计净值]" value="<?=@$consultant->meta->最优的三个产品[2]->累计净值?>" placeholder="累计净值" required class="form-control">
+					<input type="number" step="0.0001" min="0" name="meta[最优的三个产品][2][累计净值]" value="<?=@$consultant->meta->最优的三个产品[2]->累计净值?>" placeholder="累计净值" required class="form-control">
 				</div>
 			</div>
 		</div>
@@ -131,7 +131,7 @@
 				<br>
 				<div class="input-group">
 					<div class="input-group-addon">人民币</div>
-					<input type="number" name="meta[管理专户规模]" value="<?=@$consultant->meta->管理专户规模?>" required class="form-control">
+					<input type="number" step="0.01" name="meta[管理专户规模]" value="<?=@$consultant->meta->管理专户规模?>" required class="form-control">
 					<div class="input-group-addon">万元</div>
 				</div>
 			</div>
@@ -140,7 +140,7 @@
 			<label class="control-label col-sm-2">近三年平均收益率*</label>
 			<div class="col-sm-10">
 				<div class="input-group">
-					<input type="number" name="meta[近三年平均收益率]" value="<?=@$consultant->meta->近三年平均收益率?>" required class="form-control">
+					<input type="number" step="0.01" name="meta[近三年平均收益率]" value="<?=@$consultant->meta->近三年平均收益率?>" required class="form-control">
 					<div class="input-group-addon">%</div>
 				</div>
 			</div>
@@ -150,7 +150,7 @@
 			<div class="col-sm-10">
 				<div class="input-group">
 					<div class="input-group-addon">-</div>
-					<input type="number" name="meta[近三年最大回撤]" value="<?=@$consultant->meta->近三年最大回撤?>" required class="form-control">
+					<input type="number" step="0.01" name="meta[近三年最大回撤]" value="<?=@$consultant->meta->近三年最大回撤?>" required class="form-control">
 					<div class="input-group-addon">%</div>
 				</div>
 			</div>
@@ -159,7 +159,7 @@
 			<label class="control-label col-sm-2">最优专户收益率*</label>
 			<div class="col-sm-10">
 				<div class="input-group">
-					<input type="number" name="meta[最优专户收益率]" value="<?=@$consultant->meta->最优专户收益率?>" required class="form-control">
+					<input type="number" step="0.01" name="meta[最优专户收益率]" value="<?=@$consultant->meta->最优专户收益率?>" required class="form-control">
 					<div class="input-group-addon">%</div>
 				</div>
 			</div>
@@ -168,7 +168,7 @@
 			<label class="control-label col-sm-2">最差专户收益率*</label>
 			<div class="col-sm-10">
 				<div class="input-group">
-					<input type="number" name="meta[最差专户收益率]" value="<?=@$consultant->meta->最差专户收益率?>" required class="form-control">
+					<input type="number" step="0.01" name="meta[最差专户收益率]" value="<?=@$consultant->meta->最差专户收益率?>" required class="form-control">
 					<div class="input-group-addon">%</div>
 				</div>
 			</div>
@@ -180,7 +180,7 @@
 			<textarea name="meta[投资风格和策略]" required class="form-control"><?=@$consultant->meta->投资风格和策略?></textarea>
 		</div>
 	</div>
-	<?php if(Route::getCurrentRoute()->getPath() === 'signup'){ ?>
+	<?php if(empty($consultant)){ ?>
 	<div class="form-group">
 		<div class="col-sm-offset-2 col-sm-10">
 			<label class="checkbox-inline">
@@ -189,7 +189,7 @@
 			</label>
 		</div>
 	</div>
-	<?php }elseif(isset($consultant)){ ?>
+	<?php }else{ ?>
 	<a href="<?=url('/product?consultant_id=' . $consultant->id)?>" class="btn btn-info btn-block btn-lg">查看产品</a>
 	<?php } ?>
 	<hr>
