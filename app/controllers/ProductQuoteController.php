@@ -134,6 +134,10 @@ class ProductQuoteController extends BaseController {
 		{
 			$quote->value_inferior = Input::get('value_inferior');
 		}
+		else
+		{
+			$quote->value_inferior = null;
+		}
 		
 		if($product->type === '伞型')
 		{

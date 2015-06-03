@@ -9,7 +9,7 @@ class ProductController extends BaseController {
 	 */
 	public function index()
 	{
-		$query = Product::query();
+		$query = Product::where('type', '!=', '参考指标');
 		
 		if(Input::query('consultant_id'))
 		{
