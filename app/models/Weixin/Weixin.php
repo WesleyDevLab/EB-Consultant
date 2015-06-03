@@ -238,7 +238,7 @@ class Weixin {
 		$auth_result->expires_at = $auth_result->expires_in + time();
 		
 		// 客户未关注，但已经储存在数据表中，将其open_id更新进来
-		if(Input::get('hash') && $user = User::where('open_id', Input::get('hash'))->first())
+		if(Input::query('hash') && $user = User::where('open_id', Input::get('hash'))->first())
 		{
 			$user->open_id = $auth_result->openid;
 			$user->save();

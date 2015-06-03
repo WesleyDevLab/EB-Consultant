@@ -4,7 +4,7 @@
 	<h2 class="text-center">私募<?=Input::query('category') === 'product' ? '产品' : '专户'?>列表</h2>
 </div>
 
-<?php if($weixin->account !== 'news'){ ?>
+<?php if($weixin->account === 'consultant'){ ?>
 <a href="<?=url('product/create?type=' . Input::query('category'))?>" class="btn btn-primary btn-block btn-lg">登记新<?=Input::query('category') === 'product' ? '产品' : '专户'?></a>
 <hr>
 <?php } ?>
