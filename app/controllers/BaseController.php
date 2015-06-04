@@ -33,7 +33,10 @@ class BaseController extends Controller {
 			if(Session::get('user_id'))
 			{
 				$this->user = User::find(Session::get('user_id'));
-				Session::flush();
+				if(!$this->user)
+				{
+					Session::flush();
+				}
 			}
 			else
 			{
