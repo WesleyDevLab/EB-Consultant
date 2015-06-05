@@ -13,9 +13,11 @@
 		</td>
 		<td>
 			<a href="<?=url('consultant/' . $consultant->id)?>" class="btn btn-default"><span class="glyphicon glyphicon-edit"></span> 资料</a>
+			<a href="<?=url()?>" class="btn btn-default" style="margin-top:3px"><span class="glyphicon glyphicon-paperclip"></span> 动态</a>
 		</td>
 		<td>
-			<a href="<?=url()?>/product?consultant_id=<?=$consultant->id?>" class="btn btn-default"><span class="glyphicon glyphicon-usd"></span> 产品</a>
+			<a href="<?=url('product?consultant_id=' . $consultant->id)?>" class="btn btn-default"><span class="glyphicon glyphicon-usd"></span> 专户</a>
+			<a href="<?=url('product?consultant_id=' . $consultant->id . '&category=product')?>" class="btn btn-default" style="margin-top:3px"><span class="glyphicon glyphicon-usd"></span> 产品</a>
 		</td>
 	</tr>
 	<?php } ?>

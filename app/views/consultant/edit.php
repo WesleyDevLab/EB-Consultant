@@ -77,7 +77,7 @@
 			</div>
 		</div>
 		<div class="form-group">
-			<label class="control-label col-sm-2">最优的三个产品名称、规模、累计净值*</label>
+			<label class="control-label col-sm-2">最优的三个产品名称、初始规模、累计净值*</label>
 			<div class="col-sm-10">
 				<p><input type="text" name="meta[最优的三个产品][0][名称]" value="<?=@$consultant->meta->最优的三个产品[0]->名称?>" placeholder="名称" required class="form-control"></p>
 				<div class="input-group">
@@ -175,7 +175,7 @@
 		</div>
 	</fieldset>
 	<div class="form-group">
-		<label class="control-label col-sm-2">投资风格和策略*</label>
+		<label class="control-label col-sm-2">基金经理介绍和投资策略*</label>
 		<div class="col-sm-10">
 			<textarea name="meta[投资风格和策略]" required class="form-control"><?=@$consultant->meta->投资风格和策略?></textarea>
 		</div>
