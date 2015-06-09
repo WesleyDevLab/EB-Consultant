@@ -140,6 +140,16 @@
 	</fieldset>
 	<fieldset id="management"<?php if(@$product->type !== '管理型'){ ?> style="display:none"<?php } ?>>
 		<div class="form-group">
+			<label class="control-label col-sm-2">起始资金规模*</label>
+			<div class="col-sm-10">
+				<div class="input-group">
+					<div class="input-group-addon">人民币</div>
+					<input type="number" step="0.01" min="0" name="meta[起始资金规模]" value="<?=@$product->meta->起始资金规模?>" required class="form-control">
+					<div class="input-group-addon">元</div>
+				</div>
+			</div>
+		</div>
+		<div class="form-group">
 			<label class="control-label col-sm-2">基金管理人*</label>
 			<div class="col-sm-10">
 				<input type="text" name="meta[基金管理人]" value="<?=@$product->meta->基金管理人?>" required class="form-control">

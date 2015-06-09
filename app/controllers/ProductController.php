@@ -99,7 +99,7 @@ class ProductController extends BaseController {
 		$product->name = Input::get('name');
 		$product->type = Input::get('type');
 		$product->meta = Input::get('meta');
-		$product->initial_cap = $product->type === '单账户' ? Input::get('meta.起始资金规模') : Input::get('meta.劣后资金规模') * (1 + Input::get('meta.杠杆配比'));
+		$product->initial_cap = in_array($product->type, ['单账户', '管理型']) ? Input::get('meta.起始资金规模') : Input::get('meta.劣后资金规模') * (1 + Input::get('meta.杠杆配比'));
 		$product->start_date = Input::get('start_date');
 		
 		if(!$product->consultant && $this->user->loggable instanceof Consultant)
