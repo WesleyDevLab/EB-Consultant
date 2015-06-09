@@ -39,3 +39,4 @@ Route::post('product/{product}/quote/{quote}', 'ProductQuoteController@update');
 Route::resource('product', 'ProductController');
 Route::resource('consultant', 'ConsultantController');
 Route::resource('product.quote', 'ProductQuoteController', array('except'=>array('show')));
+Route::get('product/{product}/quote/dump', 'ProductQuoteController@dump');

@@ -50,6 +50,71 @@ class ProductQuoteController extends BaseController {
 		
 	}
 	
+	/**
+	 * 将产品的净值和对应的对照指标导出一张Excel表格
+	 * @param Product $product
+	 */
+	public function dump(Product $product)
+	{
+		$sheet_data = array();
+		
+		$query = $product->quotes()->dateAscending();
+		
+		if(!$this->user instanceof Consultant && (!$this->user || !$this->user->is_admin))
+		{
+			$query->fridayOnly();
+		}
+		
+		$quotes = $query->get();
+		
+		$sh300 = Product::firstOrCreate(array('name'=>'沪深300指数'));
+		$query_sh300 = $sh300->quotes()->where('date', '>=', $product->start_date)->dateAscending();
+		$quotes_sh300 = $query_sh300->get();
+		
+		foreach($quotes as $quote)
+		{
+			$row = array('日期'=>$quote->date->format('Y/m/d'), '单位净值'=>$quote->value);
+			
+			$row['单位净值盈亏'] = $quote->value - 1;
+			
+			if(in_array($product->type, array('结构化', '伞型')))
+			{
+				$row['劣后净值'] = $quote->value_inferior;
+				$row['劣后净值盈亏'] = $quote->value_inferior ? $quote->value_inferior - 1 : null;
+			}
+			
+			$quote_300 = $quotes_sh300->filter(function($quote_300) use ($quote)
+			{
+				return $quote_300->date->eq($quote->date);
+			})
+			->first();
+			
+			if($quote_300)
+			{
+				$row['沪深300指数'] = $quote_300->value;
+				$row['沪深300涨幅'] = ($row['沪深300指数'] - $quotes_sh300->first()->value) / $quotes_sh300->first()->value;
+			}
+			
+			$sheet_data[] = $row;
+		}
+		
+		Excel::create($product->name . '净值报表', function($excel) use ($sheet_data)
+		{
+			$excel->sheet('净值报表', function($sheet) use ($sheet_data)
+			{
+				$sheet->setColumnFormat(array(
+					'A'=>'yyyy-mm-dd',
+					'C'=>'0.00%',
+					'E'=>'0.00%',
+					'G'=>'0.00%'
+				));
+				
+				$sheet->fromArray($sheet_data);
+			});
+		})
+		->export();
+	}
+	
 
 	/**
 	 * 为一产品添加，修改一条净值报告

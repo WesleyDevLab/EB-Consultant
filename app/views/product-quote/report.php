@@ -1,6 +1,10 @@
 <?php echo View::make('header'); ?>
 <div class="page-header">
-	<h2 class="text-center">净值报告 <small><?=isset($product) ? $product->name : ''?><?php if($user && ($user->id === $product->consultant_id || $user->is_admin) && $product->category === 'account'){?> <?=$product->clients->first()->name?><?php } ?></small></h2>
+	<h2 class="text-center">
+		净值报告
+		<small><?=isset($product) ? $product->name : ''?><?php if($user && ($user->id === $product->consultant_id || $user->is_admin) && $product->category === 'account'){?> <?=$product->clients->first()->name?><?php } ?></small>
+		<?php if(isset($product)){ ?><a href="<?=url('product/' . $product->id . '/quote/dump')?>" class="btn btn-primary btn-sm pull-right">下载报表</a><?php } ?>
+	</h2>
 </div>
 <?php if(!isset($product)){ ?>
 <div class="alert alert-warning">
