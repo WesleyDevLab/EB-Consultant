@@ -22,7 +22,7 @@
 		<?php } ?>
 		<?php if(Input::get('action') !== 'make-report'){ ?>
 		<td>
-			<a href="<?=url('product/' . $product->id . '/quote')?>" class="btn btn-default">查看净值</a>
+			<a href="<?=url('product/' . $product->id . '/quote')?>" class="btn btn-default"><span class="glyphicon glyphicon-usd"></span> 查看净值</a>
 		</td>
 		<?php } ?>
 		<?php if(Input::get('action') === 'make-report' && ($user instanceof Consultant || $user->is_admin)){ ?>
