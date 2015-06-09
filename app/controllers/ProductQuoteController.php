@@ -116,6 +116,11 @@ class ProductQuoteController extends BaseController {
 
 		$quote->fill(Input::all());
 		
+		if(!$quote->date)
+		{
+			return;
+		}
+		
 		if(Input::get('cap'))
 		{
 			$quote->cap = Input::get('cap');
