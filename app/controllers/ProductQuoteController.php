@@ -12,7 +12,7 @@ class ProductQuoteController extends BaseController {
 		
 		$query = $product->quotes()->dateAscending();
 		
-		if(!$this->user instanceof Consultant && (!$this->user || !$this->user->is_admin))
+		if(!$this->user->loggable instanceof Consultant && (!$this->user || !$this->user->is_admin))
 		{
 			$query->fridayOnly();
 		}
@@ -33,7 +33,7 @@ class ProductQuoteController extends BaseController {
 		
 		$query_sh300 = $sh300->quotes()->where('date', '>=', $product->start_date)->where('date', '<=', isset($latest_quote_date) ? $latest_quote_date : date('Y-m-d'))->dateAscending();
 		
-		if(!$this->user instanceof Consultant && (!$this->user || !$this->user->is_admin))
+		if(!$this->user->loggable instanceof Consultant && (!$this->user || !$this->user->is_admin))
 		{
 			$query_sh300->fridayOnly();
 		}

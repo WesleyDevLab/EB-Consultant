@@ -15,7 +15,7 @@
 <div class="row">
 	<div class="col-sm-4 col-xs-12">
 		<?php if(isset($product)){ ?>
-		<?php if($weixin->account !== 'news'){ ?>
+		<?php if($weixin->account !== 'news' && !$quotes->isEmpty()){ ?>
 		<ul>
 			<li>累计成本：¥<?=$product->getCost()?>（仅供参考）</li>
 			<li>浮动盈亏：<?=round(($quotes->last()->value - 1) * 100, 2)?>%</li>
