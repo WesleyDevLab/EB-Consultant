@@ -82,7 +82,7 @@ class ConsultantController extends BaseController {
 	 */
 	public function show(Consultant $consultant)
 	{
-		return View::make('consultant/edit', compact('consultant'));
+		return View::make('consultant/view', compact('consultant'));
 	}
 
 

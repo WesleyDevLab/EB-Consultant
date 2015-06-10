@@ -175,7 +175,13 @@
 		</div>
 	</fieldset>
 	<div class="form-group">
-		<label class="control-label col-sm-2">基金经理介绍和投资策略*</label>
+		<label class="control-label col-sm-2">基金经理介绍*</label>
+		<div class="col-sm-10">
+			<textarea name="meta[基金经理介绍]" required class="form-control"><?=@$consultant->meta->基金经理介绍?></textarea>
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="control-label col-sm-2">投资策略*</label>
 		<div class="col-sm-10">
 			<textarea name="meta[投资风格和策略]" required class="form-control"><?=@$consultant->meta->投资风格和策略?></textarea>
 		</div>
