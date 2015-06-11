@@ -12,7 +12,7 @@
 			<h4><?=$consultant->name?> <span class="small"><?=$consultant->type?></span></h4>
 		</td>
 		<td>
-			<a href="<?=url('consultant/' . $consultant->id)?>" class="btn btn-default"><span class="glyphicon glyphicon-edit"></span> 资料</a>
+			<a href="<?=isset($user) && $user->is_admin ? url('consultant/' . $consultant->id . '/edit') : url('consultant/' . $consultant->id)?>" class="btn btn-default"><span class="glyphicon glyphicon-edit"></span> 资料</a>
 			<a href="<?=url()?>" class="btn btn-default"><span class="glyphicon glyphicon-paperclip"></span> 动态</a>
 		</td>
 		<td>
