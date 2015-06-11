@@ -107,7 +107,7 @@ class ConsultantController extends BaseController {
 	public function update(Consultant $consultant)
 	{
 		
-		if(!$this->user->is_admin && $this->user->id !== $consultant->id)
+		if(!$this->user->is_admin && $this->user->loggable->id !== $consultant->id)
 		{
 			throw new Exception('没有权限更新此投顾', 403);
 		}
@@ -131,7 +131,7 @@ class ConsultantController extends BaseController {
 	 */
 	public function destroy(Consultant $consultant)
 	{
-		if(!$this->user->is_admin && $this->user->id !== $consultant->id)
+		if(!$this->user->is_admin && $this->user->loggable->id !== $consultant->id)
 		{
 			throw new Exception('没有权限更新此投顾', 403);
 		}
