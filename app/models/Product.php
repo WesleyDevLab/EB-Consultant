@@ -3,7 +3,7 @@
 class Product extends Eloquent {
 	
 	protected $fillable = array('name', 'type', 'meta', 'initial_cap', 'start_date');
-			
+	
 	public function getDates() {
 		$columns = parent::getDates();
 		$columns[] = 'start_date';
@@ -29,13 +29,29 @@ class Product extends Eloquent {
 	{
 		$days_passed = $this->start_date->diffInDays($date);
 		
-		$cost = 0.00;
+		$annual_cost = 0.00;
 		
-		if($this->type === '伞型'){
-			$cost = $this->initial_cap / ($this->meta->杠杆配比 + 1) * $this->meta->杠杆配比 * ($this->meta->银行托管费率 + $this->meta->信托通道费率 + $this->meta->优先资金成本) / 100 * ($days_passed + 1) / 365;
+		if(isset($this->meta->杠杆配比))
+		{
+			// 优先资金
+			$initial_cap_preferred = $this->initial_cap / ($this->meta->杠杆配比 + 1) * $this->meta->杠杆配比;
 		}
 		
-		return round($cost, 2);
+		if($this->type === '管理型')
+		{
+			$annual_cost = $this->initial_cap * ($this->meta->基金管理费 + $this->meta->投顾管理费 + $this->meta->托管费) / 100;
+		}
+		
+		elseif($this->type === '伞型'){
+			$annual_cost = $initial_cap_preferred * ($this->meta->银行托管费率 + $this->meta->信托通道费率 + $this->meta->优先资金成本) / 100;
+		}
+		
+		elseif($this->type === '结构化'){
+			$annual_cost = $initial_cap_preferred * $this->meta->优先资金成本 / 100
+					+ $this->initial_cap * ($this->meta->产品管理费 + $this->meta->投顾管理费 + $this->meta->托管费) / 100;
+		}
+		
+		return round($annual_cost * $days_passed / 365, 2);
 	}
 	
 	public function getMetaAttribute($value)

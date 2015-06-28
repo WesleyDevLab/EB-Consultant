@@ -12,3 +12,4 @@
 */
 
 Artisan::add(new UpdateSH500Quote);
+Artisan::add(new CaculateValueCap);

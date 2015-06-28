@@ -11,30 +11,28 @@
 			<input type="date" name="date" value="<?=isset($quote) ? $quote->date->toDateString() : date('Y-m-d')?>" required class="form-control">
 		</div>
 	</div>
-	<?php if($product->category === 'account'){ ?>
 	<div class="form-group">
-		<label class="control-label col-sm-2">市值*</label>
+		<label class="control-label col-sm-2">市值</label>
 		<div class="col-sm-10">
 			<div class="input-group">
 				<div class="input-group-addon">人民币</div>
-				<input type="number" step="0.01" min="0" name="cap" value="<?=@$quote->cap?>" required class="form-control">
+				<input type="number" step="0.01" min="0" name="cap" value="<?=@$quote->cap_for_reference ? '' : @$quote->cap?>" class="form-control">
 				<div class="input-group-addon">元</div>
 			</div>
+			<div class="help-block">净值与市值可以任意填一项，另一项将计算参考值</div>
 		</div>
 	</div>
-	<?php }else{ ?>
 	<div class="form-group">
-		<label class="control-label col-sm-2">单位净值*</label>
+		<label class="control-label col-sm-2">单位净值</label>
 		<div class="col-sm-10">
-			<input type="number" step="0.0001" min="0" name="value" value="<?=@$quote->value?>" required class="form-control">
+			<input type="number" step="0.0001" min="0" name="value" value="<?=@$quote->value_for_reference ? '' : @$quote->value?>" class="form-control">
 		</div>
 	</div>
-	<?php } ?>
 	<?php if($product->type === '结构化'){ ?>
 	<div class="form-group">
 		<label class="control-label col-sm-2">劣后净值*</label>
 		<div class="col-sm-10">
-			<input type="number" step="0.0001" min="0" name="value_inferior" value="<?=@$quote->value_inferior?>" class="form-control">
+			<input type="number" step="0.0001" min="0" name="value_inferior" value="<?=@$quote->value_inferior_for_reference ? '' : @$quote->value_inferior?>" class="form-control">
 		</div>
 	</div>
 	<?php } ?>

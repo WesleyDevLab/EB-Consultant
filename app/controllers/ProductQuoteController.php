@@ -186,33 +186,24 @@ class ProductQuoteController extends BaseController {
 			return;
 		}
 		
-		if(Input::get('cap'))
+		if(Input::get('value'))
 		{
-			$quote->cap = Input::get('cap');
-			$quote->value = Input::get('cap') / $product->initial_cap;
-		}
-		elseif(Input::get('value'))
-		{
-			$quote->value = Input::get('value');
+			$quote->value_for_reference = false;
 		}
 		
 		if(Input::get('value_inferior'))
 		{
-			$quote->value_inferior = Input::get('value_inferior');
-		}
-		else
-		{
-			$quote->value_inferior = null;
+			$quote->value_inferior_for_reference = false;
 		}
 		
-		if($product->type === '伞型')
+		if(Input::get('cap'))
 		{
-			$cap_inferior = $product->meta->劣后资金规模;
-			$cap_preferred = $product->meta->劣后资金规模 * $product->meta->杠杆配比;
-			$quote->value_inferior = ($quote->cap - $cap_preferred - $product->getCost($quote->date)) / $cap_inferior;
+			$quote->cap_for_reference = false;
 		}
 		
 		$quote->product()->associate($product);
+		$quote->fillCapValue();
+		
 		$quote->save();
 
 		if(Input::get('continue'))
