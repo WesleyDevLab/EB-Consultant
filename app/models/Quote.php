@@ -52,7 +52,7 @@ class Quote extends Eloquent {
 			$this->cap_for_reference = true;
 		}
 		
-		if(in_array($product->type, array('伞型', '结构化')) && !$this->value_inferior)
+		if(in_array($product->type, array('伞型', '结构化')) && (!$this->value_inferior || $this->value_inferior_for_reference))
 		{
 			if(empty($product->meta->劣后资金规模) || empty($product->meta->杠杆配比))
 			{
