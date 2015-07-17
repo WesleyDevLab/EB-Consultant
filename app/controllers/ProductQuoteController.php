@@ -20,7 +20,7 @@ class ProductQuoteController extends BaseController {
 		$quotes = $query->get();
 		
 		foreach($quotes as $quote){
-			$chart_data[$product->id][] = array(strtotime($quote->date) * 1000, round($quote->value, 2));
+			$chart_data[$product->id][] = array(strtotime($quote->date) * 1000, round($quote->value_total ? $quote->value_total : $quote->value, 2));
 			if(in_array($product->type, array('结构化', '伞型')))
 			{
 				$chart_data[$product->id . '_inferior'][] = array(strtotime($quote->date) * 1000, round($quote->value_inferior, 2));

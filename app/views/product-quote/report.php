@@ -19,7 +19,7 @@
 			<?php if($weixin->account !== 'news' && !$quotes->isEmpty()){ ?>
 			<li>累计成本：¥<?=$product->getCost()?>（仅供参考）</li>
 			<?php } ?>
-			<li>浮动盈亏：<?=round(($quotes->last()->value - 1) * 100, 2)?>%</li>
+			<li>浮动盈亏：<?=round((($quotes->last()->value_total ? $quotes->last()->value_total : $quotes->last()->value) - 1) * 100, 2)?>%</li>
 			<li>下表中带*号的数值仅供参考</li>
 		</ul>
 
@@ -29,6 +29,7 @@
 					<th>日期</th>
 					<th>单位净值</th>
 					<?php if(in_array($product->type, array('结构化', '伞型'))){ ?><th>劣后净值</th><?php } ?>
+					<th>累计净值</th>
 					<?php if($weixin->account !== 'news' && $product->category === 'account'){ ?><th>市值</th><?php } ?>
 					<?php if($weixin->account === 'consultant'){ ?>
 					<th>操作</th>
@@ -41,6 +42,7 @@
 					<td><?=$quote->date->toDateString()?></td>
 					<td><?=$quote->value?><?php if($quote->value_for_reference){ ?> *<?php } ?></td>
 					<?php if(in_array($product->type, array('结构化', '伞型'))){ ?><td><?=$quote->value_inferior?><?php if($quote->value_inferior_for_reference){ ?> *<?php } ?></td><?php } ?>
+					<td><?=$quote->value_total ? $quote->value_total : $quote->value?></td>
 					<?php if($weixin->account !== 'news' && $product->category === 'account'){ ?><td>¥<?=$quote->cap?><?php if($quote->cap_for_reference){ ?> *<?php } ?></td><?php } ?>
 					<?php if($weixin->account === 'consultant'){ ?>
 					<td><a href="<?=url('product/' . $product->id . '/quote/' . $quote->id . '/edit')?>" class="btn btn-xs btn-info">修改</a></td>
@@ -72,7 +74,7 @@
 			series: [
 				<?php if(isset($product)){ ?>
 				{
-					name: '<?=$product->name?> 单位净值',
+					name: '<?=$product->name?> 累计净值',
 					data: <?=@json_encode($chart_data[$product->id])?>,
 					tooltip: {
 						valueDecimals: 2

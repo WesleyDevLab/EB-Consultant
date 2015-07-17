@@ -43,7 +43,7 @@ class CaculateValueCap extends Command {
 		}
 		else
 		{
-			$products = Product::where('name', $this->option('product-name'))->get();
+			$products = Product::where('name', $this->option('product'))->get();
 		}
 		
 		if(empty($products))
