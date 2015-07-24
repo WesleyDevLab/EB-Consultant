@@ -14,7 +14,7 @@ class ProductQuoteController extends BaseController {
 		
 		if(!$this->user || (!$this->user->loggable instanceof Consultant && !$this->user->is_admin))
 		{
-			$query->fridayOnly();
+			$query->fridayOnly($product->start_date);
 		}
 		
 		$quotes = $query->get();
@@ -35,7 +35,7 @@ class ProductQuoteController extends BaseController {
 		
 		if(!$this->user || (!$this->user->loggable instanceof Consultant && !$this->user->is_admin))
 		{
-			$query_sh300->fridayOnly();
+			$query_sh300->fridayOnly($product->start_date);
 		}
 		
 		$quotes_sh300 = $query_sh300->get();
@@ -62,7 +62,7 @@ class ProductQuoteController extends BaseController {
 		
 		if(!$this->user instanceof Consultant && (!$this->user || !$this->user->is_admin))
 		{
-			$query->fridayOnly();
+			$query->fridayOnly($product->start_date);
 		}
 		
 		$quotes = $query->get();

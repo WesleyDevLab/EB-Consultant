@@ -21,9 +21,9 @@ class Quote extends Eloquent {
 		return $query->orderBy('date', 'ASC');
 	}
 	
-	public function scopeFridayOnly($query)
+	public function scopeFridayOnly($query, $start_date = null)
 	{
-		return $query->whereRaw('DAYOFWEEK(`date`) = 6');
+		return $query->whereRaw('(DAYOFWEEK(`date`) = 6 OR `date` = ?)', [$start_date]);
 	}
 	
 	public function scopeDateDescending($query)
