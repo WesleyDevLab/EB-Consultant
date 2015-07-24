@@ -220,7 +220,7 @@ class WeixinQY {
 		
 		$query_args = array(
 			'appid'=>$this->corp_id,
-			'redirect_uri'=>is_null($redirect_uri) ? URL::current() : $redirect_uri,
+			'redirect_uri'=>is_null($redirect_uri) ? URL::full() : $redirect_uri,
 			'response_type'=>'code',
 			'scope'=>$scope,
 			'state'=>$state

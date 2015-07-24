@@ -17,7 +17,7 @@
 		</td>
 		<?php if($weixin->account !== 'news'){ ?>
 		<td>
-			<a href="<?=isset($user) && $user->id === $product->consultant->id ? url('product/' . $product->id . '/edit') : url('product/' . $product->id)?>" class="btn btn-default"><span class="glyphicon glyphicon-edit"></span> 资料</a>
+			<a href="<?=isset($user) && isset($product->consultant) && $user->id === $product->consultant->id ? url('product/' . $product->id . '/edit') : url('product/' . $product->id)?>" class="btn btn-default"><span class="glyphicon glyphicon-edit"></span> 资料</a>
 		</td>
 		<?php } ?>
 		<?php if(Input::get('action') !== 'make-report'){ ?>

@@ -142,7 +142,7 @@ class ProductController extends BaseController {
 			$this->weixin->send_message($this->user->open_id, '客户 ' . $client->name . ' 登记成功，请客户在微信点击以下地址绑定：' . 'http://client.ebillion.com.cn/product/' . $product->id . '/quote?hash=' . $client_user->open_id . '，并关注“翊弼私募产品统计平台”微信公众账号。');
 		}
 		
-		return Redirect::to('product?category=' . $product->category);
+		return Redirect::to('product?category=' . $product->category . '&action=make-report');
 	}
 
 
